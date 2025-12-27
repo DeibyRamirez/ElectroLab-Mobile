@@ -1,0 +1,106 @@
+// {
+//   "name": "Flutter CFE Dev Container",
+//   "build": {
+//     "dockerfile": "../Dockerfile",
+//     "context": ".."
+//   },
+
+//   // ========== USB habilitado ==========
+//   "runArgs": ["--privileged", "--device=/dev/bus/usb:/dev/bus/usb"],
+//   // ====================================
+
+//   // Carpeta de trabajo dentro del contenedor
+//   "workspaceFolder": "/app",
+
+//   // Monta la carpeta del proyecto del host en /app
+//   "workspaceMount": "source=${localWorkspaceFolder},target=/app,type=bind",
+
+//   // Usuario por defecto
+//   "remoteUser": "root",
+
+//   // Extensiones que se instalarán dentro del contenedor
+//   "customizations": {
+//     "vscode": {
+//       "extensions": [
+//         "Dart-Code.flutter",
+//         "Dart-Code.dart-code",
+//         "ms-azuretools.vscode-docker",
+//         "ms-vscode.git"
+//       ]
+//     }
+//   },
+
+//   // Comando que se ejecuta la primera vez que se crea el contenedor
+//   "postCreateCommand": "flutter pub get"
+// }
+
+// ----------------------------------------------
+
+// {
+//   "name": "Flutter CFE Dev Container (Docker Hub)",
+
+//   // ←←← AQUÍ ESTÁ EL CAMBIO PRINCIPAL ←←←
+//   "image": "b1cho/flutter-cfe:v1",
+//   // (ya no usamos "build", usamos la imagen directamente)
+
+//   // ========== USB habilitado para dispositivos Android físicos ==========
+//   "runArgs": ["--privileged", "--device=/dev/bus/usb:/dev/bus/usb"],
+//   // ======================================================================
+
+//   // Carpeta de trabajo dentro del contenedor
+//   "workspaceFolder": "/app",
+
+//   // Monta la carpeta del proyecto del host en /app
+//   "workspaceMount": "source=${localWorkspaceFolder},target=/app,type=bind",
+
+//   // Usuario por defecto (tu imagen ya está preparada para root)
+//   "remoteUser": "root",
+
+//   // Extensiones que se instalarán automáticamente dentro del contenedor
+//   "customizations": {
+//     "vscode": {
+//       "extensions": [
+//         "Dart-Code.flutter",
+//         "Dart-Code.dart-code",
+//         "ms-azuretools.vscode-docker",
+//         "ms-vscode.git"
+//       ]
+//     }
+//   },
+
+//   // Se ejecuta la primera vez (y cada vez que se haga Rebuild)
+//   "postCreateCommand": "flutter pub get",
+
+//   // Opcional pero recomendado: que VS Code use la terminal bash del contenedor
+//   "overrideCommand": false
+// }
+
+// ----------------------------
+
+{
+  "name": "Flutter CFE Dev Container (Docker Hub)",
+  "image": "b1cho/flutter-cfe:v1",
+
+  "runArgs": ["--privileged", "--device=/dev/bus/usb:/dev/bus/usb"],
+
+  "workspaceFolder": "/app",
+
+  "mounts": [
+    "source=${localWorkspaceFolder},target=/app,type=bind,consistency=cached"
+  ],
+
+  "remoteUser": "root",
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "Dart-Code.flutter",
+        "Dart-Code.dart-code",
+        "ms-azuretools.vscode-docker",
+        "ms-vscode.git"
+      ]
+    }
+  },
+
+  "postCreateCommand": "flutter pub get"
+}

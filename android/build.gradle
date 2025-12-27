@@ -1,0 +1,34 @@
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        // Versión de Android Gradle Plugin (ajústala a la tuya si ya existe)
+        classpath 'com.android.tools.build:gradle:8.5.2'
+        // Google Services (para Firebase)
+        classpath 'com.google.gms:google-services:4.4.2'
+        // Kotlin (ajústala a la que uses)
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.24"
+    }
+}
+
+allprojects {
+    ext.kotlin_version = '2.1.0'
+    repositories {
+        google()
+        mavenCentral()
+        }
+}
+
+rootProject.buildDir = "../build"
+subprojects {
+    project.buildDir = "${rootProject.buildDir}/${project.name}"
+}
+subprojects {
+    project.evaluationDependsOn(":app")
+}
+
+tasks.register("clean", Delete) {
+    delete rootProject.buildDir
+}

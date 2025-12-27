@@ -1,0 +1,215 @@
+{
+  "project_info": {
+    "project_number": "137443669372",
+    "firebase_url": "https://calculo-de-fuerzas-electricas-default-rtdb.firebaseio.com",
+    "project_id": "calculo-de-fuerzas-electricas",
+    "storage_bucket": "calculo-de-fuerzas-electricas.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:137443669372:android:b5b57ef7659faf8fee20f9",
+        "android_client_info": {
+          "package_name": "com.cfe.graficos_dinamicos"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "137443669372-1k2oe1ln0vemfmnk1b0dfa514r55d1o1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cfe.graficos_dinamicos",
+            "certificate_hash": "902c05f178253c9bd8a41b67d23e4b98b5029b40"
+          }
+        },
+        {
+          "client_id": "137443669372-hthn3jnea7ub70tkoa6mjgf0rk6s4nbo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cfe.graficos_dinamicos",
+            "certificate_hash": "98818bf0f7c02e05f530b48b672c1123ab4ad4ab"
+          }
+        },
+        {
+          "client_id": "137443669372-tfq6osgkhg8j8kc5dtmipu8duj8rvnqs.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cfe.graficos_dinamicos",
+            "certificate_hash": "0346c7e5b6a415ad9be20bf0fc8c03f7ed93d0ef"
+          }
+        },
+        {
+          "client_id": "137443669372-6al3df27hvf849p7gl5ii72u5de1pifv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDaZQD6HT4_hJfX0Wt7Z5xL9hPcPXgeXpE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "137443669372-6al3df27hvf849p7gl5ii72u5de1pifv.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "137443669372-fu6c7dohmli764ifkf0p7dbjqtf25id1.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.graficosDinamicos"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:137443669372:android:7a35eb3d0b9a67a7ee20f9",
+        "android_client_info": {
+          "package_name": "com.electrolab_mobile.graficos_dinamicos"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "137443669372-4vq55ol8m2b7b63qfep9fr6dif05sr7g.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.electrolab_mobile.graficos_dinamicos",
+            "certificate_hash": "0346c7e5b6a415ad9be20bf0fc8c03f7ed93d0ef"
+          }
+        },
+        {
+          "client_id": "137443669372-h8i58gc6a0vscmc3dev2cddlaeqdhgpa.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.electrolab_mobile.graficos_dinamicos",
+            "certificate_hash": "902c05f178253c9bd8a41b67d23e4b98b5029b40"
+          }
+        },
+        {
+          "client_id": "137443669372-q03djnfhepnnuucshqirtn7v75bndi62.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.electrolab_mobile.graficos_dinamicos",
+            "certificate_hash": "98818bf0f7c02e05f530b48b672c1123ab4ad4ab"
+          }
+        },
+        {
+          "client_id": "137443669372-6al3df27hvf849p7gl5ii72u5de1pifv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDaZQD6HT4_hJfX0Wt7Z5xL9hPcPXgeXpE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "137443669372-6al3df27hvf849p7gl5ii72u5de1pifv.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "137443669372-fu6c7dohmli764ifkf0p7dbjqtf25id1.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.graficosDinamicos"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:137443669372:android:8e5ff9827d1a398cee20f9",
+        "android_client_info": {
+          "package_name": "com.example.graficos_dinamicos"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "137443669372-79r0b2o7drsd9bs4a7dbk1thrr2sjmcr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.graficos_dinamicos",
+            "certificate_hash": "475a20d49e0252c9bffa004c0a94f68fccbc7b7b"
+          }
+        },
+        {
+          "client_id": "137443669372-ajmtvnopu7qsen06hip57olofib6ak7l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.graficos_dinamicos",
+            "certificate_hash": "902c05f178253c9bd8a41b67d23e4b98b5029b40"
+          }
+        },
+        {
+          "client_id": "137443669372-etgfc0cvdj1k2vu11jri2dnt0uq23rsb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.graficos_dinamicos",
+            "certificate_hash": "f1f79e0261f914ddcf998fbea32ca5b8547f13c2"
+          }
+        },
+        {
+          "client_id": "137443669372-kcv8v923c106go09gj5i3uusammb0egt.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.graficos_dinamicos",
+            "certificate_hash": "c1f0d71065b7fcbd9f49ca3f021646773212795f"
+          }
+        },
+        {
+          "client_id": "137443669372-q2ft63uaph7totigt2utoc8ar2o61j2b.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.graficos_dinamicos",
+            "certificate_hash": "98818bf0f7c02e05f530b48b672c1123ab4ad4ab"
+          }
+        },
+        {
+          "client_id": "137443669372-v7ip58tg9jke4qarjlp61273imvf6aqc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.graficos_dinamicos",
+            "certificate_hash": "20883bd3a51fc6cb4c252a1c2542600aba4a294c"
+          }
+        },
+        {
+          "client_id": "137443669372-6al3df27hvf849p7gl5ii72u5de1pifv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDaZQD6HT4_hJfX0Wt7Z5xL9hPcPXgeXpE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "137443669372-6al3df27hvf849p7gl5ii72u5de1pifv.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "137443669372-fu6c7dohmli764ifkf0p7dbjqtf25id1.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.graficosDinamicos"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
