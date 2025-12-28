@@ -254,19 +254,19 @@ class _PrincipalState extends State<Principal> {
                   child: Row(
                     children: [
                       Container(
-                        width: 64,
+                        width: 260,
                         height: 64,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(12),
                           image: const DecorationImage(
-                            image: AssetImage('assets/icon/icon.png'),
+                            image: AssetImage('assets/imagenes/App_Banner.jpg'),
                             fit: BoxFit.cover,
                           ),
                         ),
                       ),
                       const SizedBox(width: 12),
                       const Text(
-                        'C.F.E',
+                        '',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 22,
@@ -311,12 +311,11 @@ class _PrincipalState extends State<Principal> {
                     Navigator.pop(context);
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                          builder: (context) => const Recargar()),
+                      MaterialPageRoute(builder: (context) => const Recargar()),
                     );
                   },
                 ),
-                
+
                 // Botón Creadores
                 ListTile(
                   leading: const Icon(Icons.info_outline),
@@ -382,7 +381,7 @@ class _PrincipalState extends State<Principal> {
           ),
         ),
         // 3. Mostrar el banner si ya cargó
-        bottomNavigationBar: _isLoaded 
+        bottomNavigationBar: _isLoaded
             ? Container(
                 height: _miBanner!.size.height.toDouble(),
                 width: _miBanner!.size.width.toDouble(),

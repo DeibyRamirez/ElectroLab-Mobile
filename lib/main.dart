@@ -4,7 +4,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:graficos_dinamicos/Pantalla_carga.dart';
 import 'Firebase/config/firebase_options.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -13,9 +12,6 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-
-  // Cargar las variables de entorno desde el archivo .env.local
-  // await dotenv.load(fileName: ".env.local");
 
   await MobileAds.instance.initialize();
 

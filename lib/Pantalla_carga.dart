@@ -103,7 +103,8 @@ class _PantallaCargaState extends State<PantallaCarga>
 
   void _initializeVideo() {
     // Inicializa el controlador de video con un archivo de video local y configura el video para que se reproduzca en bucle.
-    _videoController = VideoPlayerController.asset('assets/videos/logo.mp4')
+    _videoController = VideoPlayerController.asset(
+        'assets/videos/ElectroLab_Logo_Animation.mp4')
       ..initialize().then((_) {
         setState(() {});
         _videoController.play();

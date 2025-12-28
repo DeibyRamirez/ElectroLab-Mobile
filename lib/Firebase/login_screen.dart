@@ -26,7 +26,6 @@ class _LoginScreenState extends State<LoginScreen> {
     final GoogleSignInAuthentication googleAuth =
         await googleUser.authentication;
 
-    // Esta es la credencial del servicio de autenticación.
     final credential = GoogleAuthProvider.credential(
       accessToken: googleAuth.accessToken,
       idToken: googleAuth.idToken,
@@ -42,25 +41,24 @@ class _LoginScreenState extends State<LoginScreen> {
 
       if (user == null) return;
 
-      // Verificar correo institucional
-      if (!user.email!.endsWith("@uniautonoma.edu.co")) {
+      // Verificar si el correo del usuario es válido
+      if (user.email == null) {
         await _auth.signOut();
         await GoogleSignIn().signOut();
 
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text("¡Usa tu correo institucional @uniautonoma.edu.co!"),
+        content: Text("¡Correo no válido!"),
           ),
         );
         return;
       }
+      
 
-      // Verificar si el usuario existe en Firestore
       final userRef = _db.collection("usuarios").doc(user.uid);
       final userSnap = await userRef.get();
 
       if (!userSnap.exists) {
-        // Si no existe, lo creamos
         await userRef.set({
           "nombre": user.displayName ?? "Sin nombre",
           "correo": user.email,
@@ -69,7 +67,6 @@ class _LoginScreenState extends State<LoginScreen> {
         });
       }
 
-      // Redirigir según rol (aquí solo manejamos estudiante por ahora)
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const Principal()),
@@ -85,40 +82,94 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // Logo de la universidad
-              Image.asset(
-                "assets/imagenes/logo_universidad.png",
-                height: 120,
+      body: Stack(
+        children: [
+          // Fondo degradado
+          Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Colors.lightBlueAccent, Colors.white],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
               ),
-              const SizedBox(height: 40),
-
-              // Botón Google
-              ElevatedButton.icon(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.lightBlue,
-                  foregroundColor: Colors.white,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-                onPressed: handleLogin,
-                icon: Image.asset(
-                  "assets/imagenes/logo_google.png",
-                  height: 24,
-                ),
-                label: const Text("Iniciar sesión con Google"),
-              ),
-            ],
+            ),
           ),
-        ),
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // Logo de la universidad
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(15),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          blurRadius: 10,
+                          offset: const Offset(0, 5),
+                        ),
+                      ],
+                    ),
+                    padding: const EdgeInsets.all(20),
+                    child: Image.asset(
+                      "assets/imagenes/App_Logo.png",
+                      height: 150,
+                    ),
+                  ),
+                  const SizedBox(height: 40),
+
+                  // Título
+                  const Text(
+                    "Bienvenido a la Plataforma",
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.lightBlue,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 10),
+                  const Text(
+                    "Inicia sesión con tu correo institucional para continuar",
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.black54,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 40),
+
+                  // Botón Google
+                  ElevatedButton.icon(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      foregroundColor: Colors.lightBlue,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 12),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        side: const BorderSide(color: Colors.lightBlue),
+                      ),
+                      elevation: 5,
+                    ),
+                    onPressed: handleLogin,
+                    icon: Image.asset(
+                      "assets/imagenes/logo_google.png",
+                      height: 24,
+                    ),
+                    label: const Text(
+                      "Iniciar sesión con Google",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
