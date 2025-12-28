@@ -12,6 +12,7 @@ import 'package:graficos_dinamicos/data/Lineal_datos.dart';
 import 'package:graficos_dinamicos/data/T_Equilatero_datos.dart';
 import 'package:graficos_dinamicos/data/T_Rectangulo_datos.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:video_player/video_player.dart';
 
 import 'Firebase/login_screen.dart';
 import 'Firebase/pages/historial_page.dart';
@@ -41,6 +42,10 @@ class _PrincipalState extends State<Principal> {
       100.0; // Máximo desde el borde izquierdo
   static const double _velocityThreshold =
       200.0; // Velocidad mínima para activación rápida
+
+  // ✅ Video del AppBar
+  late final VideoPlayerController _controladorLogo;
+  bool _logoListo = false;
 
   final List<Map<String, dynamic>> ejemplos = [
     {
@@ -103,8 +108,7 @@ class _PrincipalState extends State<Principal> {
               right: 10, // Margen derecho desde el borde de la pantalla
               width: MediaQuery.of(context).size.width * 0.45, // Ancho ajustado
               child: Material(
-                color: Colors
-                    .transparent, // Asegura que el Material sea transparente para ver el Card
+                color: Colors.transparent,
                 borderRadius: BorderRadius.circular(16),
                 elevation: 8,
                 child: Container(
@@ -170,14 +174,11 @@ class _PrincipalState extends State<Principal> {
     _currentDragX = details.globalPosition.dx;
     final double dragDistance = _currentDragX - _dragStartX;
 
-    // Solo procesar si el gesto comenzó cerca del borde izquierdo o si ya se ha movido suficiente
     if (_dragStartX <= _maxStartPosition || dragDistance > _minDragDistance) {
-      // Verificar que el movimiento sea hacia la derecha
       if (dragDistance > 0) {
-        // Abrir drawer con suavidad proporcional al movimiento
         if (dragDistance >= _minDragDistance) {
           _openDrawerSmoothly();
-          _isDragging = false; // Evitar múltiples activaciones
+          _isDragging = false;
         }
       }
     }
@@ -190,10 +191,6 @@ class _PrincipalState extends State<Principal> {
     final double dragDistance = _currentDragX - _dragStartX;
     final double velocity = details.velocity.pixelsPerSecond.dx;
 
-    // Abrir drawer si se cumple alguna de estas condiciones:
-    // 1. Se arrastró una distancia suficiente
-    // 2. La velocidad del gesto fue alta (gesto rápido)
-    // 3. El gesto comenzó cerca del borde izquierdo
     if ((dragDistance >= _minDragDistance) ||
         (velocity >= _velocityThreshold && dragDistance > 20) ||
         (_dragStartX <= _maxStartPosition && dragDistance > 30)) {
@@ -205,7 +202,6 @@ class _PrincipalState extends State<Principal> {
     _currentDragX = 0.0;
   }
 
-  // Función para abrir el drawer de manera suave
   void _openDrawerSmoothly() {
     if (_scaffoldKey.currentState?.isDrawerOpen == false) {
       _scaffoldKey.currentState?.openDrawer();
@@ -215,30 +211,66 @@ class _PrincipalState extends State<Principal> {
   @override
   void initState() {
     super.initState();
-    // 1. Inicializar el banner usando tu clase
+
+    // 1) Banner ads
     _miBanner = CargarAnuncios.crearBanner()
       ..load().then((_) {
-        setState(() {
-          _isLoaded = true;
-        });
+        if (!mounted) return;
+        setState(() => _isLoaded = true);
+      });
+
+    // 2) Video AppBar
+    _controladorLogo = VideoPlayerController.asset(
+        'assets/videos/ElectroLab_Logo_Animation_Fondo_Azul.mp4')
+      ..setLooping(true)
+      ..setVolume(0.0)
+      ..initialize().then((_) {
+        if (!mounted) return;
+        setState(() => _logoListo = true);
+        _controladorLogo.play();
       });
   }
 
   @override
   void dispose() {
-    _miBanner?.dispose(); // 2. IMPORTANTE: Limpiar memoria
+    _miBanner?.dispose();
+    _controladorLogo.dispose();
     super.dispose();
+  }
+
+  Widget _tituloAppBar() {
+    // Alto “bonito” dentro de AppBar
+    final double alto = kToolbarHeight * 1.2;
+
+    if (!_logoListo) {
+      // Fallback mientras carga (opcional)
+      return Image.asset(
+        'assets/imagenes/ElectroLab_Logo_Sin_Animation.png',
+        height: alto,
+        fit: BoxFit.contain,
+      );
+    }
+
+    return SizedBox(
+      height: alto,
+      child: FittedBox(
+        fit: BoxFit.contain,
+        child: SizedBox(
+          width: _controladorLogo.value.size.width,
+          height: _controladorLogo.value.size.height,
+          child: VideoPlayer(_controladorLogo),
+        ),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      // Reemplazamos onHorizontalDragUpdate por un sistema más completo de gestos
-      onPanStart: _handlePanStart, // Detecta el inicio del gesto
-      onPanUpdate: _handlePanUpdate, // Detecta el movimiento continuo
-      onPanEnd: _handlePanEnd, // Detecta el final del gesto
-      behavior:
-          HitTestBehavior.translucent, // Captura gestos en toda la pantalla
+      onPanStart: _handlePanStart,
+      onPanUpdate: _handlePanUpdate,
+      onPanEnd: _handlePanEnd,
+      behavior: HitTestBehavior.translucent,
       child: Scaffold(
         key: _scaffoldKey,
         drawer: Drawer(
@@ -255,11 +287,12 @@ class _PrincipalState extends State<Principal> {
                     children: [
                       Container(
                         width: 260,
-                        height: 64,
+                        height: 84,
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(0),
                           image: const DecorationImage(
-                            image: AssetImage('assets/imagenes/App_Banner.jpg'),
+                            image: AssetImage(
+                                'assets/imagenes/ElectroLab_Texto_Sin_Animation.png'),
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -352,8 +385,7 @@ class _PrincipalState extends State<Principal> {
               },
             ),
           ],
-          title: const Text("Fuerzas Eléctricas",
-              style: TextStyle(color: Colors.white)),
+          title: _tituloAppBar(),
           centerTitle: true,
           backgroundColor: Colors.blue,
         ),
@@ -380,7 +412,6 @@ class _PrincipalState extends State<Principal> {
             ),
           ),
         ),
-        // 3. Mostrar el banner si ya cargó
         bottomNavigationBar: _isLoaded
             ? Container(
                 height: _miBanner!.size.height.toDouble(),
@@ -393,7 +424,6 @@ class _PrincipalState extends State<Principal> {
   }
 }
 
-// Widget para cada ejemplo (sin cambios)
 class EjemploCard extends StatelessWidget {
   final String nombre;
   final String imagen;
@@ -415,9 +445,10 @@ class EjemploCard extends StatelessWidget {
         child: Column(
           children: [
             const SizedBox(height: 10),
-            Text(nombre,
-                style:
-                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            Text(
+              nombre,
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
             const SizedBox(height: 10),
             Padding(
               padding: const EdgeInsets.all(8.0),
