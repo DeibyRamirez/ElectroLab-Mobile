@@ -245,7 +245,7 @@ class _PrincipalState extends State<Principal> {
     if (!_logoListo) {
       // Fallback mientras carga (opcional)
       return Image.asset(
-        'assets/imagenes/ElectroLab_Logo_Sin_Animation.png',
+        'assets/imagenes/ElectroLab_Logo_Azul_Fondo_Transparente.png',
         height: alto,
         fit: BoxFit.contain,
       );
@@ -290,9 +290,10 @@ class _PrincipalState extends State<Principal> {
                         height: 84,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(0),
+                          //Imagen del Panel Lateral
                           image: const DecorationImage(
                             image: AssetImage(
-                                'assets/imagenes/ElectroLab_Texto_Sin_Animation.png'),
+                                'assets/imagenes/ElectroLab_Logo_Azul_Fondo_Transparente.png'),
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -387,7 +388,7 @@ class _PrincipalState extends State<Principal> {
           ],
           title: _tituloAppBar(),
           centerTitle: true,
-          backgroundColor: Colors.blue,
+          backgroundColor: const Color(0xFF2196F3),
         ),
         body: SingleChildScrollView(
           child: Center(

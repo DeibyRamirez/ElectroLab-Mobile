@@ -48,12 +48,11 @@ class _LoginScreenState extends State<LoginScreen> {
 
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-        content: Text("¡Correo no válido!"),
+            content: Text("¡Correo no válido!"),
           ),
         );
         return;
       }
-      
 
       final userRef = _db.collection("usuarios").doc(user.uid);
       final userSnap = await userRef.get();
@@ -103,37 +102,51 @@ class _LoginScreenState extends State<LoginScreen> {
                   // Logo de la universidad
                   Container(
                     decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(15),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
-                          blurRadius: 10,
-                          offset: const Offset(0, 5),
-                        ),
-                      ],
+                      color: Colors.transparent,
+                      borderRadius: BorderRadius.circular(100),
+                      // boxShadow: [
+                      //   BoxShadow(
+                      //     color: Colors.black.withOpacity(0.1),
+                      //     blurRadius: 10,
+                      //     offset: const Offset(0, 5),
+                      //   ),
+                      // ],
                     ),
-                    padding: const EdgeInsets.all(20),
+                    // padding: const EdgeInsets.all(0),
                     child: Image.asset(
-                      "assets/imagenes/App_Logo.png",
-                      height: 150,
+                      "assets/imagenes/ElectroLab_Icono_Azul_Fondo_Transparente.png",
+                      height: 200,
                     ),
                   ),
-                  const SizedBox(height: 40),
+                  const SizedBox(height: 0),
 
                   // Título
                   const Text(
                     "Bienvenido a la Plataforma",
                     style: TextStyle(
-                      fontSize: 24,
+                      fontSize: 28,
                       fontWeight: FontWeight.bold,
                       color: Colors.lightBlue,
                     ),
                     textAlign: TextAlign.center,
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 0),
+
                   const Text(
-                    "Inicia sesión con tu correo institucional para continuar",
+                    "ElectroLab",
+                    style: TextStyle(
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                      // color Oficil Azul: Color(0xFF0161AC)
+                      color: Color.fromARGB(255, 1, 97, 172),
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 30),
+
+                  // Descripción
+                  const Text(
+                    "Herramienta interactiva para aprender sobre fuerza eléctrica y campos eléctricos.",
                     style: TextStyle(
                       fontSize: 16,
                       color: Colors.black54,
