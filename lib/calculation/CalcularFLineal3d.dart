@@ -1,4 +1,4 @@
-// ignore_for_file: file_names, non_constant_identifier_names, must_be_immutable, library_private_types_in_public_api, unnecessary_import
+// ignore_for_file: file_names, non_constant_identifier_names, must_be_immutable, library_private_types_in_public_api, unnecessary_import, unused_local_variable
 
 import 'dart:math';
 
@@ -964,6 +964,10 @@ class _CalcularFLineal3dState extends State<CalcularFLineal3d> {
 
     return ElevatedButton(
       onPressed: () {
+
+        // Cargar anuncio
+        CargarAnuncios.mostrarIntersticial();
+        
         Navigator.push(
           context,
           MaterialPageRoute(

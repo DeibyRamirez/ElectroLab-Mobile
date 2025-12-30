@@ -55,6 +55,10 @@ class _Estilo_LibreState extends State<Estilo_Libre>
   @override
   void initState() {
     super.initState();
+
+    // Cargar anuncio
+    CargarAnuncios.mostrarIntersticial();
+
     _tabController = TabController(length: 2, vsync: this);
     _inicializarZoom();
 

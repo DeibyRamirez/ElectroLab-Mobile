@@ -3,13 +3,18 @@ import 'package:in_app_purchase/in_app_purchase.dart';
 
 class BillingManager {
   final InAppPurchase _iap = InAppPurchase.instance;
-  late StreamSubscription<List<PurchaseDetails>> _subscription;
+  late final StreamSubscription<List<PurchaseDetails>> _subscription;
 
   final void Function(String productId) onPurchaseSuccess;
 
   BillingManager({required this.onPurchaseSuccess});
 
-  void start() {
+  Future<void> start() async {
+    final available = await _iap.isAvailable();
+    if (!available) {
+      throw Exception("In-App Purchases no disponibles");
+    }
+
     _subscription = _iap.purchaseStream.listen(_listenToPurchases);
   }
 
@@ -19,20 +24,22 @@ class BillingManager {
 
   Future<void> buy(String productId) async {
     final response = await _iap.queryProductDetails({productId});
-    if (response.notFoundIDs.isNotEmpty) return;
+
+    if (response.productDetails.isEmpty) {
+      throw Exception("Producto no encontrado en Play Console: $productId");
+    }
 
     final product = response.productDetails.first;
+
     final param = PurchaseParam(productDetails: product);
 
-    if (productId.startsWith("coins_")) {
-      // CONSUMIBLE
-      _iap.buyConsumable(
+    if (productId.startsWith("creditos_")) {
+      await _iap.buyConsumable(
         purchaseParam: param,
         autoConsume: true,
       );
     } else {
-      // NO CONSUMIBLE (ej: remove_ads)
-      _iap.buyNonConsumable(
+      await _iap.buyNonConsumable(
         purchaseParam: param,
       );
     }
@@ -41,12 +48,12 @@ class BillingManager {
   void _listenToPurchases(List<PurchaseDetails> purchases) {
     for (final purchase in purchases) {
       if (purchase.status == PurchaseStatus.purchased) {
-        _handlePurchase(purchase);
+        _completePurchase(purchase);
       }
     }
   }
 
-  Future<void> _handlePurchase(PurchaseDetails purchase) async {
+  Future<void> _completePurchase(PurchaseDetails purchase) async {
     if (purchase.pendingCompletePurchase) {
       await _iap.completePurchase(purchase);
     }

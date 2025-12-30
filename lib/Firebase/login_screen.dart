@@ -63,6 +63,7 @@ class _LoginScreenState extends State<LoginScreen> {
           "correo": user.email,
           "rol": "estudiante",
           "creadoEn": FieldValue.serverTimestamp(),
+          "creditos": 10
         });
       }
 

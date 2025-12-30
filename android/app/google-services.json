@@ -75,6 +75,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "137443669372-3oqq2mok3lprknkikjunpahknekpr4au.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.electrolab_mobile.graficos_dinamicos",
+            "certificate_hash": "0ad4ab08b4aec33bf36216dc0e8582ce15ff8141"
+          }
+        },
+        {
           "client_id": "137443669372-4vq55ol8m2b7b63qfep9fr6dif05sr7g.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

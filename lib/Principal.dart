@@ -1,9 +1,10 @@
-// ignore_for_file: file_names, use_super_parameters, sized_box_for_whitespace
+// ignore_for_file: file_names, use_super_parameters, sized_box_for_whitespace, unused_import
 
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:graficos_dinamicos/Anuncios/CargarAnuncios.dart';
+import 'package:graficos_dinamicos/Recargar.dart';
 import 'package:graficos_dinamicos/billing/products.dart';
 import 'package:graficos_dinamicos/Quiz/Quiz.dart';
 import 'package:graficos_dinamicos/others/Creadores.dart';
@@ -345,7 +346,7 @@ class _PrincipalState extends State<Principal> {
                     Navigator.pop(context);
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const Recargar()),
+                      MaterialPageRoute(builder: (context) => Recargar(uid: user?.uid ?? '')),
                     );
                   },
                 ),

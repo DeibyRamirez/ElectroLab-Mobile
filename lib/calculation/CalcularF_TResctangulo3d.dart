@@ -1844,6 +1844,8 @@ class _CalFuerzasRectanguloState extends State<CalFuerzasRectangulo> {
 
     return ElevatedButton(
       onPressed: () {
+        // Cargar anuncio
+        CargarAnuncios.mostrarIntersticial();
         Navigator.push(
           context,
           MaterialPageRoute(
