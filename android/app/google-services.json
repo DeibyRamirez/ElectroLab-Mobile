@@ -8,34 +8,58 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:137443669372:android:b5b57ef7659faf8fee20f9",
+        "mobilesdk_app_id": "1:137443669372:android:7a35eb3d0b9a67a7ee20f9",
         "android_client_info": {
-          "package_name": "com.cfe.graficos_dinamicos"
+          "package_name": "com.electrolab_mobile.graficos_dinamicos"
         }
       },
       "oauth_client": [
         {
-          "client_id": "137443669372-1k2oe1ln0vemfmnk1b0dfa514r55d1o1.apps.googleusercontent.com",
+          "client_id": "137443669372-2sgjmjf0ugj6k98shhcos3u29fe3601l.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.cfe.graficos_dinamicos",
+            "package_name": "com.electrolab_mobile.graficos_dinamicos",
+            "certificate_hash": "11875017dc76f24a5e3768b774c18ab0f1f7f7ed"
+          }
+        },
+        {
+          "client_id": "137443669372-3oqq2mok3lprknkikjunpahknekpr4au.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.electrolab_mobile.graficos_dinamicos",
+            "certificate_hash": "0ad4ab08b4aec33bf36216dc0e8582ce15ff8141"
+          }
+        },
+        {
+          "client_id": "137443669372-4vq55ol8m2b7b63qfep9fr6dif05sr7g.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.electrolab_mobile.graficos_dinamicos",
+            "certificate_hash": "0346c7e5b6a415ad9be20bf0fc8c03f7ed93d0ef"
+          }
+        },
+        {
+          "client_id": "137443669372-7i9qv56bsfv38jsfdpjkob96v01r899q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.electrolab_mobile.graficos_dinamicos",
+            "certificate_hash": "28c5b6c9f36f16028bfabe1666ec7efb23c6135e"
+          }
+        },
+        {
+          "client_id": "137443669372-h8i58gc6a0vscmc3dev2cddlaeqdhgpa.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.electrolab_mobile.graficos_dinamicos",
             "certificate_hash": "902c05f178253c9bd8a41b67d23e4b98b5029b40"
           }
         },
         {
-          "client_id": "137443669372-hthn3jnea7ub70tkoa6mjgf0rk6s4nbo.apps.googleusercontent.com",
+          "client_id": "137443669372-q03djnfhepnnuucshqirtn7v75bndi62.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.cfe.graficos_dinamicos",
+            "package_name": "com.electrolab_mobile.graficos_dinamicos",
             "certificate_hash": "98818bf0f7c02e05f530b48b672c1123ab4ad4ab"
-          }
-        },
-        {
-          "client_id": "137443669372-tfq6osgkhg8j8kc5dtmipu8duj8rvnqs.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.cfe.graficos_dinamicos",
-            "certificate_hash": "0346c7e5b6a415ad9be20bf0fc8c03f7ed93d0ef"
           }
         },
         {
@@ -68,42 +92,58 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:137443669372:android:7a35eb3d0b9a67a7ee20f9",
+        "mobilesdk_app_id": "1:137443669372:android:c49920b5c1975b6cee20f9",
         "android_client_info": {
-          "package_name": "com.electrolab_mobile.graficos_dinamicos"
+          "package_name": "com.electrolab_mobile_ar.graficos_dinamicos"
         }
       },
       "oauth_client": [
         {
-          "client_id": "137443669372-3oqq2mok3lprknkikjunpahknekpr4au.apps.googleusercontent.com",
+          "client_id": "137443669372-28g2j1bq90ol041m7tmk2ic71a8nfhtg.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.electrolab_mobile.graficos_dinamicos",
-            "certificate_hash": "0ad4ab08b4aec33bf36216dc0e8582ce15ff8141"
+            "package_name": "com.electrolab_mobile_ar.graficos_dinamicos",
+            "certificate_hash": "98818bf0f7c02e05f530b48b672c1123ab4ad4ab"
           }
         },
         {
-          "client_id": "137443669372-4vq55ol8m2b7b63qfep9fr6dif05sr7g.apps.googleusercontent.com",
+          "client_id": "137443669372-67vih4fpfp6njo3emdah00tv96kdir7u.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.electrolab_mobile.graficos_dinamicos",
+            "package_name": "com.electrolab_mobile_ar.graficos_dinamicos",
             "certificate_hash": "0346c7e5b6a415ad9be20bf0fc8c03f7ed93d0ef"
           }
         },
         {
-          "client_id": "137443669372-h8i58gc6a0vscmc3dev2cddlaeqdhgpa.apps.googleusercontent.com",
+          "client_id": "137443669372-76tnla3qvh42tttidkjaain0l239ukdi.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.electrolab_mobile.graficos_dinamicos",
-            "certificate_hash": "902c05f178253c9bd8a41b67d23e4b98b5029b40"
+            "package_name": "com.electrolab_mobile_ar.graficos_dinamicos",
+            "certificate_hash": "0ad4ab08b4aec33bf36216dc0e8582ce15ff8141"
           }
         },
         {
-          "client_id": "137443669372-q03djnfhepnnuucshqirtn7v75bndi62.apps.googleusercontent.com",
+          "client_id": "137443669372-9vgd4cr6l1v482fgtehkulkte4sdb47r.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.electrolab_mobile.graficos_dinamicos",
-            "certificate_hash": "98818bf0f7c02e05f530b48b672c1123ab4ad4ab"
+            "package_name": "com.electrolab_mobile_ar.graficos_dinamicos",
+            "certificate_hash": "11875017dc76f24a5e3768b774c18ab0f1f7f7ed"
+          }
+        },
+        {
+          "client_id": "137443669372-eaaqlj33bb7mfmko7k3i8i1p0ppvm93r.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.electrolab_mobile_ar.graficos_dinamicos",
+            "certificate_hash": "e1a3d37e66dd87eacdf0bb7c6a70c606f148a233"
+          }
+        },
+        {
+          "client_id": "137443669372-i55rjp5ts4aephrvlrdk038rmrm8mka4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.electrolab_mobile_ar.graficos_dinamicos",
+            "certificate_hash": "28c5b6c9f36f16028bfabe1666ec7efb23c6135e"
           }
         },
         {

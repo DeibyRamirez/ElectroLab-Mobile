@@ -15,7 +15,7 @@
     
     <application
         
-        android:label="ElectroLab: Mobile"
+        android:label="ElectroLab: Mobile (AR)"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
         android:usesCleartextTraffic="true"> <!-- Permitir tráfico claro -->

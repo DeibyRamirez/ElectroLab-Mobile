@@ -1,4 +1,4 @@
-package com.electrolab_mobile.graficos_dinamicos
+package com.electrolab_mobile_ar.graficos_dinamicos
 
 import io.flutter.embedding.android.FlutterActivity
 
