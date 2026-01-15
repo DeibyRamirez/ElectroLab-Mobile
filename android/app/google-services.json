@@ -91,6 +91,14 @@
           }
         },
         {
+          "client_id": "137443669372-7i9qv56bsfv38jsfdpjkob96v01r899q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.electrolab_mobile.graficos_dinamicos",
+            "certificate_hash": "28c5b6c9f36f16028bfabe1666ec7efb23c6135e"
+          }
+        },
+        {
           "client_id": "137443669372-h8i58gc6a0vscmc3dev2cddlaeqdhgpa.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
