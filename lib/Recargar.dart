@@ -37,6 +37,11 @@ class _RecargarState extends State<Recargar> {
       await CoinsRepository.addCoins(widget.uid, product.coins);
     }
 
+    // Lógica específica para el producto de anuncios
+    if (productId == "anuncios") {
+      await CoinsRepository.desactivarAnuncios(widget.uid);
+    }
+
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -80,11 +85,10 @@ class _RecargarState extends State<Recargar> {
           ),
         ),
       ),
-      
+
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          
           // Título de sección
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
@@ -97,7 +101,7 @@ class _RecargarState extends State<Recargar> {
               ),
             ),
           ),
-          
+
           // Lista de productos
           Expanded(
             child: ListView.builder(
@@ -105,10 +109,11 @@ class _RecargarState extends State<Recargar> {
               itemCount: productos.length,
               itemBuilder: (context, index) {
                 final product = productos[index];
-                
+
                 // Efecto visual para destacar productos populares
-                bool isPopular = index == 1 || index == 2; // Ajusta según tus necesidades
-                
+                bool isPopular =
+                    index == 1 || index == 2; // Ajusta según tus necesidades
+
                 return Container(
                   margin: const EdgeInsets.only(bottom: 16),
                   decoration: BoxDecoration(
@@ -164,7 +169,7 @@ class _RecargarState extends State<Recargar> {
               },
             ),
           ),
-          
+
           // Footer informativo
           Container(
             padding: const EdgeInsets.all(16),

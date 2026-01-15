@@ -1,8 +1,10 @@
 // ignore_for_file: file_names, use_super_parameters, sized_box_for_whitespace, unused_import
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:graficos_dinamicos/Anuncios/AdBannerWrapper.dart';
 import 'package:graficos_dinamicos/Anuncios/CargarAnuncios.dart';
 import 'package:graficos_dinamicos/Recargar.dart';
 import 'package:graficos_dinamicos/billing/products.dart';
@@ -28,9 +30,6 @@ class Principal extends StatefulWidget {
 class _PrincipalState extends State<Principal> {
   final User? user = FirebaseAuth.instance.currentUser;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
-  BannerAd? _miBanner;
-  bool _isLoaded = false;
 
   // Variables para controlar el gesto de deslizamiento mejorado
   double _dragStartX = 0.0;
@@ -212,14 +211,6 @@ class _PrincipalState extends State<Principal> {
   @override
   void initState() {
     super.initState();
-
-    // 1) Banner ads
-    _miBanner = CargarAnuncios.crearBanner()
-      ..load().then((_) {
-        if (!mounted) return;
-        setState(() => _isLoaded = true);
-      });
-
     // 2) Video AppBar
     _controladorLogo = VideoPlayerController.asset(
         'assets/videos/ElectroLab_Logo_Animation_Fondo_Azul.mp4')
@@ -234,7 +225,6 @@ class _PrincipalState extends State<Principal> {
 
   @override
   void dispose() {
-    _miBanner?.dispose();
     _controladorLogo.dispose();
     super.dispose();
   }
@@ -267,164 +257,162 @@ class _PrincipalState extends State<Principal> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onPanStart: _handlePanStart,
-      onPanUpdate: _handlePanUpdate,
-      onPanEnd: _handlePanEnd,
-      behavior: HitTestBehavior.translucent,
-      child: Scaffold(
-        key: _scaffoldKey,
-        drawer: Drawer(
-          child: SafeArea(
-            child: Column(
-              children: [
-                DrawerHeader(
-                  margin: EdgeInsets.zero,
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: Colors.blue.shade700,
-                  ),
-                  child: Row(
-                    children: [
-                      Container(
-                        width: 260,
-                        height: 84,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(0),
-                          //Imagen del Panel Lateral
-                          image: const DecorationImage(
-                            image: AssetImage(
-                                'assets/imagenes/ElectroLab_Logo_Azul_Fondo_Transparente.png'),
-                            fit: BoxFit.cover,
+    
+  
+    return AdBannerWrapper(
+      child: GestureDetector(
+        onPanStart: _handlePanStart,
+        onPanUpdate: _handlePanUpdate,
+        onPanEnd: _handlePanEnd,
+        behavior: HitTestBehavior.translucent,
+        child: Scaffold(
+          key: _scaffoldKey,
+          drawer: Drawer(
+            child: SafeArea(
+              child: Column(
+                children: [
+                  DrawerHeader(
+                    margin: EdgeInsets.zero,
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: Colors.blue.shade700,
+                    ),
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 260,
+                          height: 84,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(0),
+                            //Imagen del Panel Lateral
+                            image: const DecorationImage(
+                              image: AssetImage(
+                                  'assets/imagenes/ElectroLab_Logo_Azul_Fondo_Transparente.png'),
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
-                      ),
-                      const SizedBox(width: 12),
-                      const Text(
-                        '',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
+                        const SizedBox(width: 12),
+                        const Text(
+                          '',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-
-                // Botón Historial
-                ListTile(
-                  leading: const Icon(Icons.history),
-                  title: const Text('Historial'),
-                  onTap: () {
-                    Navigator.pop(context);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => HistorialPage()),
-                    );
-                  },
-                ),
-
-                // Botón Unirse a quiz
-                ListTile(
-                  leading: const Icon(Icons.computer),
-                  title: const Text('Quiz'),
-                  onTap: () {
-                    Navigator.pop(context);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const Quiz()),
-                    );
-                  },
-                ),
-
-                // Botón Recargar Creditos
-                ListTile(
-                  leading: const Icon(Icons.monetization_on_outlined),
-                  title: const Text('Recargar'),
-                  onTap: () {
-                    Navigator.pop(context);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Recargar(uid: user?.uid ?? '')),
-                    );
-                  },
-                ),
-
-                // Botón Creadores
-                ListTile(
-                  leading: const Icon(Icons.info_outline),
-                  title: const Text('Sobre'),
-                  onTap: () {
-                    Navigator.pop(context);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const Creadores()),
-                    );
-                  },
-                ),
-              ],
+      
+                  // Botón Historial
+                  ListTile(
+                    leading: const Icon(Icons.history),
+                    title: const Text('Historial'),
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => HistorialPage()),
+                      );
+                    },
+                  ),
+      
+                  // Botón Unirse a quiz
+                  ListTile(
+                    leading: const Icon(Icons.computer),
+                    title: const Text('Quiz'),
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const Quiz()),
+                      );
+                    },
+                  ),
+      
+                  // Botón Recargar Creditos
+                  ListTile(
+                    leading: const Icon(Icons.monetization_on_outlined),
+                    title: const Text('Recargar'),
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Recargar(uid: user?.uid ?? '')),
+                      );
+                    },
+                  ),
+      
+                  // Botón Creadores
+                  ListTile(
+                    leading: const Icon(Icons.info_outline),
+                    title: const Text('Sobre'),
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const Creadores()),
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ),
+          appBar: AppBar(
+            actions: [
+              Builder(
+                builder: (context) {
+                  return IconButton(
+                    tooltip: "Perfil",
+                    onPressed: () => _mostrarPerfilPopup(context),
+                    icon: CircleAvatar(
+                      backgroundImage: user?.photoURL != null
+                          ? NetworkImage(user!.photoURL!)
+                          : null,
+                      child: user?.photoURL == null
+                          ? const Icon(Icons.person)
+                          : null,
+                    ),
+                  );
+                },
+              ),
+            ],
+            title: _tituloAppBar(),
+            centerTitle: true,
+            backgroundColor: const Color(0xFF2196F3),
+          ),
+          body: SingleChildScrollView(
+            child: Center(
+              child: Column(
+                children: [
+                  const SizedBox(height: 30),
+                  const Text(
+                    "Selecciona el Diagrama de tu ejercicio",
+                    style: TextStyle(fontSize: 19),
+                  ),
+                  const SizedBox(height: 10),
+                  Column(
+                    children: ejemplos.map((ejemplo) {
+                      return EjemploCard(
+                        nombre: ejemplo['nombre'] as String,
+                        imagen: ejemplo['imagen'] as String,
+                        onTap: () => _openExample(ejemplo),
+                      );
+                    }).toList(),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
-        appBar: AppBar(
-          actions: [
-            Builder(
-              builder: (context) {
-                return IconButton(
-                  tooltip: "Perfil",
-                  onPressed: () => _mostrarPerfilPopup(context),
-                  icon: CircleAvatar(
-                    backgroundImage: user?.photoURL != null
-                        ? NetworkImage(user!.photoURL!)
-                        : null,
-                    child: user?.photoURL == null
-                        ? const Icon(Icons.person)
-                        : null,
-                  ),
-                );
-              },
-            ),
-          ],
-          title: _tituloAppBar(),
-          centerTitle: true,
-          backgroundColor: const Color(0xFF2196F3),
-        ),
-        body: SingleChildScrollView(
-          child: Center(
-            child: Column(
-              children: [
-                const SizedBox(height: 30),
-                const Text(
-                  "Selecciona el Diagrama de tu ejercicio",
-                  style: TextStyle(fontSize: 19),
-                ),
-                const SizedBox(height: 10),
-                Column(
-                  children: ejemplos.map((ejemplo) {
-                    return EjemploCard(
-                      nombre: ejemplo['nombre'] as String,
-                      imagen: ejemplo['imagen'] as String,
-                      onTap: () => _openExample(ejemplo),
-                    );
-                  }).toList(),
-                ),
-              ],
-            ),
-          ),
-        ),
-        bottomNavigationBar: _isLoaded
-            ? Container(
-                height: _miBanner!.size.height.toDouble(),
-                width: _miBanner!.size.width.toDouble(),
-                child: AdWidget(ad: _miBanner!),
-              )
-            : null,
       ),
-    );
+    );}
   }
-}
+   
+
 
 class EjemploCard extends StatelessWidget {
   final String nombre;

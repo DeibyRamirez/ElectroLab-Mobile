@@ -4,9 +4,9 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_3d_controller/flutter_3d_controller.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:graficos_dinamicos/AR/AR.dart';
 import 'package:graficos_dinamicos/AR/UtilidadesAr.dart';
+import 'package:graficos_dinamicos/Anuncios/AdBannerWrapper.dart';
 import 'package:graficos_dinamicos/Anuncios/CargarAnuncios.dart';
 import 'package:graficos_dinamicos/others/Informacion.dart';
 import 'NotacionCientifica.dart';
@@ -101,9 +101,6 @@ class _CalFuerzasIsoscelesState extends State<CalFuerzasIsosceles> {
 
   late Map<String, Map<String, dynamic>> mapaseleccionado;
 
-  // Anuncio
-  BannerAd? _miBanner;
-  bool _isLoaded = false;
 
   @override
   void initState() {
@@ -111,18 +108,10 @@ class _CalFuerzasIsoscelesState extends State<CalFuerzasIsosceles> {
     _controller = Flutter3DController();
     _controllerResult = Flutter3DController();
 
-    // 1. Inicializar el banner usando tu clase
-    _miBanner = CargarAnuncios.crearBanner()
-      ..load().then((_) {
-        setState(() {
-          _isLoaded = true;
-        });
-      });
   }
 
   @override
   void dispose() {
-    _miBanner?.dispose(); // 2. IMPORTANTE: Limpiar memoria
     super.dispose();
   }
 
@@ -382,438 +371,433 @@ class _CalFuerzasIsoscelesState extends State<CalFuerzasIsosceles> {
   }
 
   Widget _buildCase1() {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.blue,
-        title: const Text("Fuerza Eléctrica",
-            style: TextStyle(color: Colors.white)),
-        centerTitle: true,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.help_outline),
-            onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const Informacion()));
-            },
-          ),
-        ],
-      ),
-      body: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Padding(
-          padding: const EdgeInsets.all(15),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Card(
-                    elevation: 5,
-                    child: Column(
-                      children: [
-                        const Text(
-                          "Carga N1",
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
-                        ),
-                        SizedBox(
-                          height: 160,
-                          width: 100,
-                          child: Flutter3DViewer(
-                            controller: _controller,
-                            src: widget.modelocarga1,
-                            progressBarColor: Colors.blue,
-                            activeGestureInterceptor: true,
-                            enableTouch: true,
-                            onProgress: (double progressValue) {
-                              debugPrint(
-                                  'Carga del Modelo en Proceso : $progressValue');
-                            },
-                            onLoad: (String modelAddress) {
-                              debugPrint('Modelo Cargando : $modelAddress');
-                            },
-                            onError: (String error) {
-                              debugPrint('Modelo Fallo al Cargar : $error');
-                            },
-                          ),
-                        ),
-                        Text(
-                          ' ${widget.carga1.toStringAsFixed(2)}',
-                          style: const TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
-                        )
-                      ],
-                    ),
-                  ),
-                  Card(
-                    elevation: 5,
-                    child: Column(
-                      children: [
-                        const Text(
-                          "Carga N2",
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
-                        ),
-                        SizedBox(
-                          height: 160,
-                          width: 100,
-                          child: Flutter3DViewer(
-                            controller: _controller,
-                            src: widget.modelocarga2,
-                            progressBarColor: Colors.blue,
-                            activeGestureInterceptor: true,
-                            enableTouch: true,
-                            onProgress: (double progressValue) {
-                              debugPrint(
-                                  'Carga del Modelo en Proceso : $progressValue');
-                            },
-                            onLoad: (String modelAddress) {
-                              debugPrint('Modelo Cargando : $modelAddress');
-                            },
-                            onError: (String error) {
-                              debugPrint('Modelo Fallo al Cargar : $error');
-                            },
-                          ),
-                        ),
-                        Text(
-                          ' ${widget.carga2.toStringAsFixed(2)}',
-                          style: const TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
-                        )
-                      ],
-                    ),
-                  ),
-                  Card(
-                    elevation: 5,
-                    child: Column(
-                      children: [
-                        const Text(
-                          "Carga N3",
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
-                        ),
-                        SizedBox(
-                          height: 160,
-                          width: 100,
-                          child: Flutter3DViewer(
-                            controller: _controller,
-                            src: widget.modelocarga3,
-                            progressBarColor: Colors.blue,
-                            activeGestureInterceptor: true,
-                            enableTouch: true,
-                            onProgress: (double progressValue) {
-                              debugPrint(
-                                  'Carga del Modelo en Proceso : $progressValue');
-                            },
-                            onLoad: (String modelAddress) {
-                              debugPrint('Modelo Cargando : $modelAddress');
-                            },
-                            onError: (String error) {
-                              debugPrint('Modelo Fallo al Cargar : $error');
-                            },
-                          ),
-                        ),
-                        Text(
-                          ' ${widget.carga3.toStringAsFixed(2)}',
-                          style: const TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
-                        )
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
-              Card(
-                elevation: 5,
-                child: Column(
+    return AdBannerWrapper(
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.blue,
+          title: const Text("Fuerza Eléctrica",
+              style: TextStyle(color: Colors.white)),
+          centerTitle: true,
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.help_outline),
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const Informacion()));
+              },
+            ),
+          ],
+        ),
+        body: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Padding(
+            padding: const EdgeInsets.all(15),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    Card(
+                      elevation: 5,
+                      child: Column(
                         children: [
                           const Text(
-                            "Sentido de las Fuerzas",
+                            "Carga N1",
                             style: TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.bold),
                           ),
-                          BotonAR(),
-                        ]),
-                    SizedBox(
-                      height: 280,
-                      child: Flutter3DViewer(
-                        controller: _controller,
-                        src: widget.combinacion3d,
-                        progressBarColor: Colors.blue,
-                        activeGestureInterceptor: true,
-                        enableTouch: true,
-                        onProgress: (double progressValue) {
-                          debugPrint(
-                              'Carga del Modelo en Proceso : $progressValue');
-                        },
-                        onLoad: (String modelAddress) {
-                          debugPrint('Modelo Cargando : $modelAddress');
-                        },
-                        onError: (String error) {
-                          debugPrint('Modelo Fallo al Cargar : $error');
-                        },
-                      ),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.all(5),
-                      decoration: const BoxDecoration(
-                          color: Colors.blue,
-                          borderRadius: BorderRadius.all(Radius.circular(5))),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          ElevatedButton(
-                              onPressed: () {
-                                setState(() {
-                                  estaPlay = !estaPlay;
-
-                                  if (estaPlay) {
-                                    _controller.playAnimation();
-                                  } else {
-                                    _controller.pauseAnimation();
-                                  }
-                                });
+                          SizedBox(
+                            height: 160,
+                            width: 100,
+                            child: Flutter3DViewer(
+                              controller: _controller,
+                              src: widget.modelocarga1,
+                              progressBarColor: Colors.blue,
+                              activeGestureInterceptor: true,
+                              enableTouch: true,
+                              onProgress: (double progressValue) {
+                                debugPrint(
+                                    'Carga del Modelo en Proceso : $progressValue');
                               },
-                              child: Icon(estaPlay
-                                  ? Icons.pause_outlined
-                                  : Icons.play_arrow_rounded)),
-                          const SizedBox(
-                            width: 20,
+                              onLoad: (String modelAddress) {
+                                debugPrint('Modelo Cargando : $modelAddress');
+                              },
+                              onError: (String error) {
+                                debugPrint('Modelo Fallo al Cargar : $error');
+                              },
+                            ),
                           ),
+                          Text(
+                            ' ${widget.carga1.toStringAsFixed(2)}',
+                            style: const TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold),
+                          )
                         ],
                       ),
-                    )
-                  ],
-                ),
-              ),
-              const SizedBox(height: 20),
-              Card(
-                child: Column(
-                  children: [
-                    const SizedBox(height: 10),
-                    const Text(
-                      "Digite el sentido de las componentes",
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
-                    const SizedBox(height: 20),
-                    _buildForceComponent(
-                        "Sentido de la Fuerza (1 y 2)", signoX1, signoY1,
-                        (newX, newY) {
-                      setState(() {
-                        signoX1 = newX;
-                        signoY1 = newY;
-                      });
-                    }),
-                    const SizedBox(height: 20),
-                    _buildForceComponent(
-                        "Sentido de la Fuerza (1 y 3)", signoX2, signoY2,
-                        (newX, newY) {
-                      setState(() {
-                        signoX2 = newX;
-                        signoY2 = newY;
-                      });
-                    }),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  setState(() {
-                    actualizarMensajes();
-                    mostrarResultante = true;
-                  });
-                },
-                style: ButtonStyle(
-                  backgroundColor: WidgetStateProperty.all(Colors.blue),
-                  elevation: WidgetStateProperty.all(10),
-                ),
-                child: const Text(
-                  "Ingresar los signos",
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-              const SizedBox(height: 20),
-              Card(
-                elevation: 5,
-                margin: const EdgeInsets.symmetric(vertical: 10),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: SizedBox(
-                    width: 400,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        const Text(
-                          "Magnitud de las Fuerzas",
-                          style: TextStyle(
-                              fontSize: 19, fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(height: 10),
-                        Text(
-                          mensajeResultadoC1,
-                          style: const TextStyle(fontSize: 16),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-              Card(
-                elevation: 5,
-                margin: const EdgeInsets.symmetric(vertical: 10),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: SizedBox(
-                    width: 400,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        const Text(
-                          "Fuerzas con Dirección y Componentes",
-                          style: TextStyle(
-                              fontSize: 19, fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(height: 10),
-                        Text(
-                          mensajeComponentesC1,
-                          style: const TextStyle(fontSize: 16),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-              Card(
-                elevation: 5,
-                margin: const EdgeInsets.symmetric(vertical: 10),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: SizedBox(
-                    width: 400,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        const Text(
-                          "Sumas de las Fuerzas",
-                          style: TextStyle(
-                              fontSize: 19, fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(height: 10),
-                        Text(
-                          mensajesumasC1,
-                          style: const TextStyle(fontSize: 16),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-              Card(
-                elevation: 5,
-                margin: const EdgeInsets.symmetric(vertical: 10),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    Card(
+                      elevation: 5,
+                      child: Column(
                         children: [
                           const Text(
-                            "Magnitud de la F. Resultante",
+                            "Carga N2",
                             style: TextStyle(
-                                fontSize: 19, fontWeight: FontWeight.bold),
+                                fontSize: 20, fontWeight: FontWeight.bold),
                           ),
-                          BotonAR(mostrarResultante: true),
+                          SizedBox(
+                            height: 160,
+                            width: 100,
+                            child: Flutter3DViewer(
+                              controller: _controller,
+                              src: widget.modelocarga2,
+                              progressBarColor: Colors.blue,
+                              activeGestureInterceptor: true,
+                              enableTouch: true,
+                              onProgress: (double progressValue) {
+                                debugPrint(
+                                    'Carga del Modelo en Proceso : $progressValue');
+                              },
+                              onLoad: (String modelAddress) {
+                                debugPrint('Modelo Cargando : $modelAddress');
+                              },
+                              onError: (String error) {
+                                debugPrint('Modelo Fallo al Cargar : $error');
+                              },
+                            ),
+                          ),
+                          Text(
+                            ' ${widget.carga2.toStringAsFixed(2)}',
+                            style: const TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold),
+                          )
                         ],
                       ),
-                      const SizedBox(height: 10),
-                      Text(
-                        mensajeFresultanteC1,
-                        style: const TextStyle(
-                            fontSize: 22, fontWeight: FontWeight.bold),
+                    ),
+                    Card(
+                      elevation: 5,
+                      child: Column(
+                        children: [
+                          const Text(
+                            "Carga N3",
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(
+                            height: 160,
+                            width: 100,
+                            child: Flutter3DViewer(
+                              controller: _controller,
+                              src: widget.modelocarga3,
+                              progressBarColor: Colors.blue,
+                              activeGestureInterceptor: true,
+                              enableTouch: true,
+                              onProgress: (double progressValue) {
+                                debugPrint(
+                                    'Carga del Modelo en Proceso : $progressValue');
+                              },
+                              onLoad: (String modelAddress) {
+                                debugPrint('Modelo Cargando : $modelAddress');
+                              },
+                              onError: (String error) {
+                                debugPrint('Modelo Fallo al Cargar : $error');
+                              },
+                            ),
+                          ),
+                          Text(
+                            ' ${widget.carga3.toStringAsFixed(2)}',
+                            style: const TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold),
+                          )
+                        ],
                       ),
-                      if (mostrarResultante)
-                        SizedBox(
-                          height: 280,
-                          child: Flutter3DViewer(
-                            controller: _controllerResult,
-                            src: widget.resultante3d,
-                            progressBarColor: Colors.blue,
-                            activeGestureInterceptor: true,
-                            enableTouch: true,
-                            onProgress: (double progressValue) {
-                              debugPrint(
-                                  'Carga del Modelo en Proceso : $progressValue');
-                            },
-                            onLoad: (String modelAddress) {
-                              debugPrint('Modelo Cargando : $modelAddress');
-                            },
-                            onError: (String error) {
-                              debugPrint('Modelo Fallo al Cargar : $error');
-                            },
-                          ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 20),
+                Card(
+                  elevation: 5,
+                  child: Column(
+                    children: [
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            const Text(
+                              "Sentido de las Fuerzas",
+                              style: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.bold),
+                            ),
+                            BotonAR(),
+                          ]),
+                      SizedBox(
+                        height: 280,
+                        child: Flutter3DViewer(
+                          controller: _controller,
+                          src: widget.combinacion3d,
+                          progressBarColor: Colors.blue,
+                          activeGestureInterceptor: true,
+                          enableTouch: true,
+                          onProgress: (double progressValue) {
+                            debugPrint(
+                                'Carga del Modelo en Proceso : $progressValue');
+                          },
+                          onLoad: (String modelAddress) {
+                            debugPrint('Modelo Cargando : $modelAddress');
+                          },
+                          onError: (String error) {
+                            debugPrint('Modelo Fallo al Cargar : $error');
+                          },
                         ),
-                      if (mostrarResultante)
-                        Container(
-                          margin: const EdgeInsets.all(5),
-                          decoration: const BoxDecoration(
-                              color: Colors.blue,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(5))),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              ElevatedButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      resultPlay = !resultPlay;
+                      ),
+                      Container(
+                        margin: const EdgeInsets.all(5),
+                        decoration: const BoxDecoration(
+                            color: Colors.blue,
+                            borderRadius: BorderRadius.all(Radius.circular(5))),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            ElevatedButton(
+                                onPressed: () {
+                                  setState(() {
+                                    estaPlay = !estaPlay;
 
-                                      if (resultPlay) {
-                                        _controllerResult.playAnimation();
-                                      } else {
-                                        _controllerResult.pauseAnimation();
-                                      }
-                                    });
-                                  },
-                                  child: Icon(resultPlay
-                                      ? Icons.pause_outlined
-                                      : Icons.play_arrow_rounded)),
-                              const SizedBox(
-                                width: 20,
-                              ),
-                            ],
-                          ),
-                        )
+                                    if (estaPlay) {
+                                      _controller.playAnimation();
+                                    } else {
+                                      _controller.pauseAnimation();
+                                    }
+                                  });
+                                },
+                                child: Icon(estaPlay
+                                    ? Icons.pause_outlined
+                                    : Icons.play_arrow_rounded)),
+                            const SizedBox(
+                              width: 20,
+                            ),
+                          ],
+                        ),
+                      )
                     ],
                   ),
                 ),
-              ),
-            ],
+                const SizedBox(height: 20),
+                Card(
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 10),
+                      const Text(
+                        "Digite el sentido de las componentes",
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 20),
+                      _buildForceComponent(
+                          "Sentido de la Fuerza (1 y 2)", signoX1, signoY1,
+                          (newX, newY) {
+                        setState(() {
+                          signoX1 = newX;
+                          signoY1 = newY;
+                        });
+                      }),
+                      const SizedBox(height: 20),
+                      _buildForceComponent(
+                          "Sentido de la Fuerza (1 y 3)", signoX2, signoY2,
+                          (newX, newY) {
+                        setState(() {
+                          signoX2 = newX;
+                          signoY2 = newY;
+                        });
+                      }),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      actualizarMensajes();
+                      mostrarResultante = true;
+                    });
+                  },
+                  style: ButtonStyle(
+                    backgroundColor: WidgetStateProperty.all(Colors.blue),
+                    elevation: WidgetStateProperty.all(10),
+                  ),
+                  child: const Text(
+                    "Ingresar los signos",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Card(
+                  elevation: 5,
+                  margin: const EdgeInsets.symmetric(vertical: 10),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: SizedBox(
+                      width: 400,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          const Text(
+                            "Magnitud de las Fuerzas",
+                            style: TextStyle(
+                                fontSize: 19, fontWeight: FontWeight.bold),
+                          ),
+                          const SizedBox(height: 10),
+                          Text(
+                            mensajeResultadoC1,
+                            style: const TextStyle(fontSize: 16),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Card(
+                  elevation: 5,
+                  margin: const EdgeInsets.symmetric(vertical: 10),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: SizedBox(
+                      width: 400,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          const Text(
+                            "Fuerzas con Dirección y Componentes",
+                            style: TextStyle(
+                                fontSize: 19, fontWeight: FontWeight.bold),
+                          ),
+                          const SizedBox(height: 10),
+                          Text(
+                            mensajeComponentesC1,
+                            style: const TextStyle(fontSize: 16),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Card(
+                  elevation: 5,
+                  margin: const EdgeInsets.symmetric(vertical: 10),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: SizedBox(
+                      width: 400,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          const Text(
+                            "Sumas de las Fuerzas",
+                            style: TextStyle(
+                                fontSize: 19, fontWeight: FontWeight.bold),
+                          ),
+                          const SizedBox(height: 10),
+                          Text(
+                            mensajesumasC1,
+                            style: const TextStyle(fontSize: 16),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Card(
+                  elevation: 5,
+                  margin: const EdgeInsets.symmetric(vertical: 10),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            const Text(
+                              "Magnitud de la F. Resultante",
+                              style: TextStyle(
+                                  fontSize: 19, fontWeight: FontWeight.bold),
+                            ),
+                            BotonAR(mostrarResultante: true),
+                          ],
+                        ),
+                        const SizedBox(height: 10),
+                        Text(
+                          mensajeFresultanteC1,
+                          style: const TextStyle(
+                              fontSize: 22, fontWeight: FontWeight.bold),
+                        ),
+                        if (mostrarResultante)
+                          SizedBox(
+                            height: 280,
+                            child: Flutter3DViewer(
+                              controller: _controllerResult,
+                              src: widget.resultante3d,
+                              progressBarColor: Colors.blue,
+                              activeGestureInterceptor: true,
+                              enableTouch: true,
+                              onProgress: (double progressValue) {
+                                debugPrint(
+                                    'Carga del Modelo en Proceso : $progressValue');
+                              },
+                              onLoad: (String modelAddress) {
+                                debugPrint('Modelo Cargando : $modelAddress');
+                              },
+                              onError: (String error) {
+                                debugPrint('Modelo Fallo al Cargar : $error');
+                              },
+                            ),
+                          ),
+                        if (mostrarResultante)
+                          Container(
+                            margin: const EdgeInsets.all(5),
+                            decoration: const BoxDecoration(
+                                color: Colors.blue,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(5))),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                ElevatedButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        resultPlay = !resultPlay;
+
+                                        if (resultPlay) {
+                                          _controllerResult.playAnimation();
+                                        } else {
+                                          _controllerResult.pauseAnimation();
+                                        }
+                                      });
+                                    },
+                                    child: Icon(resultPlay
+                                        ? Icons.pause_outlined
+                                        : Icons.play_arrow_rounded)),
+                                const SizedBox(
+                                  width: 20,
+                                ),
+                              ],
+                            ),
+                          )
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
-      // 3. Mostrar el banner si ya cargó
-      bottomNavigationBar: _isLoaded
-          // ignore: sized_box_for_whitespace
-          ? Container(
-              height: _miBanner!.size.height.toDouble(),
-              width: _miBanner!.size.width.toDouble(),
-              child: AdWidget(ad: _miBanner!),
-            )
-          : null,
     );
   }
 
@@ -929,334 +913,755 @@ class _CalFuerzasIsoscelesState extends State<CalFuerzasIsosceles> {
   ////////////////////////////////
 
   Widget _buildCase2() {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.blue,
-        title: const Text(
-          "Fuerza Eléctrica",
-          style: TextStyle(color: Colors.white),
-        ),
-        centerTitle: true,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.help_outline),
-            onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const Informacion()));
-            },
+    return AdBannerWrapper(
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.blue,
+          title: const Text(
+            "Fuerza Eléctrica",
+            style: TextStyle(color: Colors.white),
           ),
-        ],
-      ),
-      body: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Padding(
-          padding: const EdgeInsets.all(15),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Card(
-                    elevation: 5,
-                    child: Column(
-                      children: [
-                        const Text(
-                          "Carga N1",
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
-                        ),
-                        SizedBox(
-                          height: 160,
-                          width: 100,
-                          child: Flutter3DViewer(
-                            controller: _controller,
-                            src: widget.modelocarga1,
-                            progressBarColor: Colors.blue,
-                            activeGestureInterceptor: true,
-                            enableTouch: true,
-                            onProgress: (double progressValue) {
-                              debugPrint(
-                                  'Carga del Modelo en Proceso : $progressValue');
-                            },
-                            onLoad: (String modelAddress) {
-                              debugPrint('Modelo Cargando : $modelAddress');
-                            },
-                            onError: (String error) {
-                              debugPrint('Modelo Fallo al Cargar : $error');
-                            },
-                          ),
-                        ),
-                        Text(
-                          ' ${widget.carga1.toStringAsFixed(2)}',
-                          style: const TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
-                        )
-                      ],
-                    ),
-                  ),
-                  Card(
-                    elevation: 5,
-                    child: Column(
-                      children: [
-                        const Text(
-                          "Carga N2",
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
-                        ),
-                        SizedBox(
-                          height: 160,
-                          width: 100,
-                          child: Flutter3DViewer(
-                            controller: _controller,
-                            src: widget.modelocarga2,
-                            progressBarColor: Colors.blue,
-                            activeGestureInterceptor: true,
-                            enableTouch: true,
-                            onProgress: (double progressValue) {
-                              debugPrint(
-                                  'Carga del Modelo en Proceso : $progressValue');
-                            },
-                            onLoad: (String modelAddress) {
-                              debugPrint('Modelo Cargando : $modelAddress');
-                            },
-                            onError: (String error) {
-                              debugPrint('Modelo Fallo al Cargar : $error');
-                            },
-                          ),
-                        ),
-                        Text(
-                          ' ${widget.carga2.toStringAsFixed(2)}',
-                          style: const TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
-                        )
-                      ],
-                    ),
-                  ),
-                  Card(
-                    elevation: 5,
-                    child: Column(
-                      children: [
-                        const Text(
-                          "Carga N3",
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
-                        ),
-                        SizedBox(
-                          height: 160,
-                          width: 100,
-                          child: Flutter3DViewer(
-                            controller: _controller,
-                            src: widget.modelocarga3,
-                            progressBarColor: Colors.blue,
-                            activeGestureInterceptor: true,
-                            enableTouch: true,
-                            onProgress: (double progressValue) {
-                              debugPrint(
-                                  'Carga del Modelo en Proceso : $progressValue');
-                            },
-                            onLoad: (String modelAddress) {
-                              debugPrint('Modelo Cargando : $modelAddress');
-                            },
-                            onError: (String error) {
-                              debugPrint('Modelo Fallo al Cargar : $error');
-                            },
-                          ),
-                        ),
-                        Text(
-                          ' ${widget.carga3.toStringAsFixed(2)}',
-                          style: const TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
-                        )
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
-              Card(
-                elevation: 5,
-                child: Column(
+          centerTitle: true,
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.help_outline),
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const Informacion()));
+              },
+            ),
+          ],
+        ),
+        body: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Padding(
+            padding: const EdgeInsets.all(15),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    Card(
+                      elevation: 5,
+                      child: Column(
                         children: [
                           const Text(
-                            "Sentido de las Fuerzas",
+                            "Carga N1",
                             style: TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.bold),
                           ),
-                          BotonAR(),
-                        ]),
-                    SizedBox(
-                      height: 280,
-                      width: 400,
-                      child: Flutter3DViewer(
-                        controller: _controller,
-                        src: widget.combinacion3d,
-                        progressBarColor: Colors.blue,
-                        activeGestureInterceptor: true,
-                        enableTouch: true,
-                        onProgress: (double progressValue) {
-                          debugPrint(
-                              'Carga del Modelo en Proceso : $progressValue');
-                        },
-                        onLoad: (String modelAddress) {
-                          debugPrint('Modelo Cargando : $modelAddress');
-                        },
-                        onError: (String error) {
-                          debugPrint('Modelo Fallo al Cargar : $error');
-                        },
+                          SizedBox(
+                            height: 160,
+                            width: 100,
+                            child: Flutter3DViewer(
+                              controller: _controller,
+                              src: widget.modelocarga1,
+                              progressBarColor: Colors.blue,
+                              activeGestureInterceptor: true,
+                              enableTouch: true,
+                              onProgress: (double progressValue) {
+                                debugPrint(
+                                    'Carga del Modelo en Proceso : $progressValue');
+                              },
+                              onLoad: (String modelAddress) {
+                                debugPrint('Modelo Cargando : $modelAddress');
+                              },
+                              onError: (String error) {
+                                debugPrint('Modelo Fallo al Cargar : $error');
+                              },
+                            ),
+                          ),
+                          Text(
+                            ' ${widget.carga1.toStringAsFixed(2)}',
+                            style: const TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold),
+                          )
+                        ],
                       ),
                     ),
-                    Container(
-                      margin: const EdgeInsets.all(5),
-                      decoration: const BoxDecoration(
-                          color: Colors.blue,
-                          borderRadius: BorderRadius.all(Radius.circular(5))),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                    Card(
+                      elevation: 5,
+                      child: Column(
                         children: [
-                          ElevatedButton(
-                              onPressed: () {
-                                setState(() {
-                                  estaPlay = !estaPlay;
-
-                                  if (estaPlay) {
-                                    _controller.playAnimation();
-                                  } else {
-                                    _controller.pauseAnimation();
-                                  }
-                                });
+                          const Text(
+                            "Carga N2",
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(
+                            height: 160,
+                            width: 100,
+                            child: Flutter3DViewer(
+                              controller: _controller,
+                              src: widget.modelocarga2,
+                              progressBarColor: Colors.blue,
+                              activeGestureInterceptor: true,
+                              enableTouch: true,
+                              onProgress: (double progressValue) {
+                                debugPrint(
+                                    'Carga del Modelo en Proceso : $progressValue');
                               },
-                              child: Icon(estaPlay
-                                  ? Icons.pause_outlined
-                                  : Icons.play_arrow_rounded)),
-                          const SizedBox(
-                            width: 20,
+                              onLoad: (String modelAddress) {
+                                debugPrint('Modelo Cargando : $modelAddress');
+                              },
+                              onError: (String error) {
+                                debugPrint('Modelo Fallo al Cargar : $error');
+                              },
+                            ),
+                          ),
+                          Text(
+                            ' ${widget.carga2.toStringAsFixed(2)}',
+                            style: const TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold),
+                          )
+                        ],
+                      ),
+                    ),
+                    Card(
+                      elevation: 5,
+                      child: Column(
+                        children: [
+                          const Text(
+                            "Carga N3",
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(
+                            height: 160,
+                            width: 100,
+                            child: Flutter3DViewer(
+                              controller: _controller,
+                              src: widget.modelocarga3,
+                              progressBarColor: Colors.blue,
+                              activeGestureInterceptor: true,
+                              enableTouch: true,
+                              onProgress: (double progressValue) {
+                                debugPrint(
+                                    'Carga del Modelo en Proceso : $progressValue');
+                              },
+                              onLoad: (String modelAddress) {
+                                debugPrint('Modelo Cargando : $modelAddress');
+                              },
+                              onError: (String error) {
+                                debugPrint('Modelo Fallo al Cargar : $error');
+                              },
+                            ),
+                          ),
+                          Text(
+                            ' ${widget.carga3.toStringAsFixed(2)}',
+                            style: const TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold),
+                          )
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 20),
+                Card(
+                  elevation: 5,
+                  child: Column(
+                    children: [
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            const Text(
+                              "Sentido de las Fuerzas",
+                              style: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.bold),
+                            ),
+                            BotonAR(),
+                          ]),
+                      SizedBox(
+                        height: 280,
+                        width: 400,
+                        child: Flutter3DViewer(
+                          controller: _controller,
+                          src: widget.combinacion3d,
+                          progressBarColor: Colors.blue,
+                          activeGestureInterceptor: true,
+                          enableTouch: true,
+                          onProgress: (double progressValue) {
+                            debugPrint(
+                                'Carga del Modelo en Proceso : $progressValue');
+                          },
+                          onLoad: (String modelAddress) {
+                            debugPrint('Modelo Cargando : $modelAddress');
+                          },
+                          onError: (String error) {
+                            debugPrint('Modelo Fallo al Cargar : $error');
+                          },
+                        ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.all(5),
+                        decoration: const BoxDecoration(
+                            color: Colors.blue,
+                            borderRadius: BorderRadius.all(Radius.circular(5))),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            ElevatedButton(
+                                onPressed: () {
+                                  setState(() {
+                                    estaPlay = !estaPlay;
+
+                                    if (estaPlay) {
+                                      _controller.playAnimation();
+                                    } else {
+                                      _controller.pauseAnimation();
+                                    }
+                                  });
+                                },
+                                child: Icon(estaPlay
+                                    ? Icons.pause_outlined
+                                    : Icons.play_arrow_rounded)),
+                            const SizedBox(
+                              width: 20,
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 20),
+                const Text(
+                  "Digite el sentido de las componentes",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 20),
+                _buildForceComponent(
+                    "Sentido de la Fuerza (2 y 1)", signoX1, signoY1,
+                    (newX, newY) {
+                  setState(() {
+                    signoX1 = newX;
+                    signoY1 = newY;
+                  });
+                }),
+                const SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      actualizarMensajes();
+                      mostrarResultante = true;
+                    });
+                  },
+                  style: ButtonStyle(
+                    backgroundColor: WidgetStateProperty.all(Colors.blue),
+                    elevation: WidgetStateProperty.all(10),
+                  ),
+                  child: const Text(
+                    "Ingresar los signos",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Card(
+                  elevation: 5,
+                  margin: const EdgeInsets.symmetric(vertical: 10),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: SizedBox(
+                      width: 400,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          const Text(
+                            "Magnitud de las Fuerzas",
+                            style: TextStyle(
+                                fontSize: 19, fontWeight: FontWeight.bold),
+                          ),
+                          const SizedBox(height: 10),
+                          Text(
+                            mensajeResultadoC2,
+                            style: const TextStyle(fontSize: 16),
                           ),
                         ],
                       ),
-                    )
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Card(
+                  elevation: 5,
+                  margin: const EdgeInsets.symmetric(vertical: 10),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: SizedBox(
+                      width: 400,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          const Text(
+                            "Fuerzas con Dirección y Componentes",
+                            style: TextStyle(
+                                fontSize: 19, fontWeight: FontWeight.bold),
+                          ),
+                          const SizedBox(height: 10),
+                          Text(mensajeComponentesC2,
+                              style: const TextStyle(fontSize: 16)),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Card(
+                  elevation: 5,
+                  margin: const EdgeInsets.symmetric(vertical: 10),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: SizedBox(
+                      width: 400,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          const Text(
+                            "Sumas de las Fuerzas",
+                            style: TextStyle(
+                                fontSize: 19, fontWeight: FontWeight.bold),
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(height: 10),
+                          Text(
+                            mensajesumasC2,
+                            style: const TextStyle(fontSize: 16),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Card(
+                  elevation: 5,
+                  margin: const EdgeInsets.symmetric(vertical: 10),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: SizedBox(
+                      width: 400,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              const Text(
+                                "Magnitud de la F. Resultante",
+                                style: TextStyle(
+                                    fontSize: 19, fontWeight: FontWeight.bold),
+                              ),
+                              BotonAR(mostrarResultante: true),
+                            ],
+                          ),
+                          const SizedBox(height: 10),
+                          Text(
+                            mensajeFresultanteC2,
+                            style: const TextStyle(
+                                fontSize: 22, fontWeight: FontWeight.bold),
+                          ),
+                          if (mostrarResultante)
+                            SizedBox(
+                              height: 280,
+                              child: Flutter3DViewer(
+                                controller: _controllerResult,
+                                src: widget.resultante3d,
+                                progressBarColor: Colors.blue,
+                                activeGestureInterceptor: true,
+                                enableTouch: true,
+                                onProgress: (double progressValue) {
+                                  debugPrint(
+                                      'Carga del Modelo en Proceso : $progressValue');
+                                },
+                                onLoad: (String modelAddress) {
+                                  debugPrint('Modelo Cargando : $modelAddress');
+                                },
+                                onError: (String error) {
+                                  debugPrint('Modelo Fallo al Cargar : $error');
+                                },
+                              ),
+                            ),
+                          if (mostrarResultante)
+                            Container(
+                              margin: const EdgeInsets.all(5),
+                              decoration: const BoxDecoration(
+                                  color: Colors.blue,
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(5))),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  ElevatedButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          resultPlay = !resultPlay;
+
+                                          if (resultPlay) {
+                                            _controllerResult.playAnimation();
+                                          } else {
+                                            _controllerResult.pauseAnimation();
+                                          }
+                                        });
+                                      },
+                                      child: Icon(resultPlay
+                                          ? Icons.pause_outlined
+                                          : Icons.play_arrow_rounded)),
+                                  const SizedBox(
+                                    width: 20,
+                                  ),
+                                ],
+                              ),
+                            )
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+/////////////////////
+
+  Widget _buildCase3() {
+    return AdBannerWrapper(
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.blue,
+          title: const Text(
+            "Fuerza Eléctrica",
+            style: TextStyle(color: Colors.white),
+          ),
+          centerTitle: true,
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.help_outline),
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const Informacion()));
+              },
+            ),
+          ],
+        ),
+        body: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Padding(
+            padding: const EdgeInsets.all(15),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Card(
+                      elevation: 5,
+                      child: Column(
+                        children: [
+                          const Text(
+                            "Carga N1",
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(
+                            height: 160,
+                            width: 100,
+                            child: Flutter3DViewer(
+                              controller: _controller,
+                              src: widget.modelocarga1,
+                              progressBarColor: Colors.blue,
+                              activeGestureInterceptor: true,
+                              enableTouch: true,
+                              onProgress: (double progressValue) {
+                                debugPrint(
+                                    'Carga del Modelo en Proceso : $progressValue');
+                              },
+                              onLoad: (String modelAddress) {
+                                debugPrint('Modelo Cargando : $modelAddress');
+                              },
+                              onError: (String error) {
+                                debugPrint('Modelo Fallo al Cargar : $error');
+                              },
+                            ),
+                          ),
+                          Text(
+                            ' ${widget.carga1.toStringAsFixed(2)}',
+                            style: const TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold),
+                          )
+                        ],
+                      ),
+                    ),
+                    Card(
+                      elevation: 5,
+                      child: Column(
+                        children: [
+                          const Text(
+                            "Carga N2",
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(
+                            height: 160,
+                            width: 100,
+                            child: Flutter3DViewer(
+                              controller: _controller,
+                              src: widget.modelocarga2,
+                              progressBarColor: Colors.blue,
+                              activeGestureInterceptor: true,
+                              enableTouch: true,
+                              onProgress: (double progressValue) {
+                                debugPrint(
+                                    'Carga del Modelo en Proceso : $progressValue');
+                              },
+                              onLoad: (String modelAddress) {
+                                debugPrint('Modelo Cargando : $modelAddress');
+                              },
+                              onError: (String error) {
+                                debugPrint('Modelo Fallo al Cargar : $error');
+                              },
+                            ),
+                          ),
+                          Text(
+                            ' ${widget.carga2.toStringAsFixed(2)}',
+                            style: const TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold),
+                          )
+                        ],
+                      ),
+                    ),
+                    Card(
+                      elevation: 5,
+                      child: Column(
+                        children: [
+                          const Text(
+                            "Carga N3",
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(
+                            height: 160,
+                            width: 100,
+                            child: Flutter3DViewer(
+                              controller: _controller,
+                              src: widget.modelocarga3,
+                              progressBarColor: Colors.blue,
+                              activeGestureInterceptor: true,
+                              enableTouch: true,
+                              onProgress: (double progressValue) {
+                                debugPrint(
+                                    'Carga del Modelo en Proceso : $progressValue');
+                              },
+                              onLoad: (String modelAddress) {
+                                debugPrint('Modelo Cargando : $modelAddress');
+                              },
+                              onError: (String error) {
+                                debugPrint('Modelo Fallo al Cargar : $error');
+                              },
+                            ),
+                          ),
+                          Text(
+                            ' ${widget.carga3.toStringAsFixed(2)}',
+                            style: const TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold),
+                          )
+                        ],
+                      ),
+                    ),
                   ],
                 ),
-              ),
-              const SizedBox(height: 20),
-              const Text(
-                "Digite el sentido de las componentes",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 20),
-              _buildForceComponent(
-                  "Sentido de la Fuerza (2 y 1)", signoX1, signoY1,
-                  (newX, newY) {
-                setState(() {
-                  signoX1 = newX;
-                  signoY1 = newY;
-                });
-              }),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
+                const SizedBox(height: 20),
+                Card(
+                  elevation: 5,
+                  child: Column(
+                    children: [
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            const Text(
+                              "Sentido de las Fuerzas",
+                              style: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.bold),
+                            ),
+                            BotonAR(),
+                          ]),
+                      SizedBox(
+                        height: 280,
+                        width: 400,
+                        child: Flutter3DViewer(
+                          controller: _controller,
+                          src: widget.combinacion3d,
+                          progressBarColor: Colors.blue,
+                          activeGestureInterceptor: true,
+                          enableTouch: true,
+                          onProgress: (double progressValue) {
+                            debugPrint(
+                                'Carga del Modelo en Proceso : $progressValue');
+                          },
+                          onLoad: (String modelAddress) {
+                            debugPrint('Modelo Cargando : $modelAddress');
+                          },
+                          onError: (String error) {
+                            debugPrint('Modelo Fallo al Cargar : $error');
+                          },
+                        ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.all(5),
+                        decoration: const BoxDecoration(
+                            color: Colors.blue,
+                            borderRadius: BorderRadius.all(Radius.circular(5))),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            ElevatedButton(
+                                onPressed: () {
+                                  setState(() {
+                                    estaPlay = !estaPlay;
+
+                                    if (estaPlay) {
+                                      _controller.playAnimation();
+                                    } else {
+                                      _controller.pauseAnimation();
+                                    }
+                                  });
+                                },
+                                child: Icon(estaPlay
+                                    ? Icons.pause_outlined
+                                    : Icons.play_arrow_rounded)),
+                            const SizedBox(
+                              width: 20,
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 20),
+                const Text(
+                  "Digite el sentido de las componentes",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 10),
+                _buildForceComponent(
+                    "Sentido de las Fuerza (3 y 1)", signoX1, signoY1,
+                    (newX, newY) {
                   setState(() {
-                    actualizarMensajes();
-                    mostrarResultante = true;
+                    signoX1 = newX;
+                    signoY1 = newY;
                   });
-                },
-                style: ButtonStyle(
-                  backgroundColor: WidgetStateProperty.all(Colors.blue),
-                  elevation: WidgetStateProperty.all(10),
+                }),
+                const SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      actualizarMensajes();
+                      mostrarResultante = true;
+                    });
+                  },
+                  style: ButtonStyle(
+                    backgroundColor: WidgetStateProperty.all(Colors.blue),
+                    elevation: WidgetStateProperty.all(10),
+                  ),
+                  child: const Text(
+                    "Ingresar los signos",
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
-                child: const Text(
-                  "Ingresar los signos",
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-              const SizedBox(height: 20),
-              Card(
-                elevation: 5,
-                margin: const EdgeInsets.symmetric(vertical: 10),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: SizedBox(
-                    width: 400,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        const Text(
-                          "Magnitud de las Fuerzas",
-                          style: TextStyle(
-                              fontSize: 19, fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(height: 10),
-                        Text(
-                          mensajeResultadoC2,
-                          style: const TextStyle(fontSize: 16),
-                        ),
-                      ],
+                const SizedBox(height: 20),
+                Card(
+                  elevation: 5,
+                  margin: const EdgeInsets.symmetric(vertical: 10),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: SizedBox(
+                      width: 400,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          const Text(
+                            "Magnitud de las Fuerzas",
+                            style: TextStyle(
+                                fontSize: 19, fontWeight: FontWeight.bold),
+                          ),
+                          const SizedBox(height: 10),
+                          Text(
+                            mensajeResultadoC3,
+                            style: const TextStyle(fontSize: 16),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 20),
-              Card(
-                elevation: 5,
-                margin: const EdgeInsets.symmetric(vertical: 10),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: SizedBox(
-                    width: 400,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        const Text(
-                          "Fuerzas con Dirección y Componentes",
-                          style: TextStyle(
-                              fontSize: 19, fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(height: 10),
-                        Text(mensajeComponentesC2,
-                            style: const TextStyle(fontSize: 16)),
-                      ],
+                const SizedBox(height: 20),
+                Card(
+                  elevation: 5,
+                  margin: const EdgeInsets.symmetric(vertical: 10),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: SizedBox(
+                      width: 400,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          const Text(
+                            "Fuerzas con Dirección y Componentes",
+                            style: TextStyle(
+                                fontSize: 19, fontWeight: FontWeight.bold),
+                          ),
+                          const SizedBox(height: 10),
+                          Text(
+                            mensajeComponentesC3,
+                            style: const TextStyle(fontSize: 16),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 20),
-              Card(
-                elevation: 5,
-                margin: const EdgeInsets.symmetric(vertical: 10),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: SizedBox(
-                    width: 400,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        const Text(
-                          "Sumas de las Fuerzas",
-                          style: TextStyle(
-                              fontSize: 19, fontWeight: FontWeight.bold),
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(height: 10),
-                        Text(
-                          mensajesumasC2,
-                          style: const TextStyle(fontSize: 16),
-                        ),
-                      ],
+                const SizedBox(height: 20),
+                Card(
+                  elevation: 5,
+                  margin: const EdgeInsets.symmetric(vertical: 10),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: SizedBox(
+                      width: 400,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          const Text(
+                            "Sumas de las Fuerzas",
+                            style: TextStyle(
+                                fontSize: 19, fontWeight: FontWeight.bold),
+                          ),
+                          const SizedBox(height: 10),
+                          Text(
+                            mensajesumasC3,
+                            style: const TextStyle(fontSize: 16),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 20),
-              Card(
-                elevation: 5,
-                margin: const EdgeInsets.symmetric(vertical: 10),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: SizedBox(
-                    width: 400,
+                const SizedBox(height: 20),
+                Card(
+                  elevation: 5,
+                  margin: const EdgeInsets.symmetric(vertical: 10),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
@@ -1273,9 +1678,9 @@ class _CalFuerzasIsoscelesState extends State<CalFuerzasIsosceles> {
                         ),
                         const SizedBox(height: 10),
                         Text(
-                          mensajeFresultanteC2,
+                          mensajeFresultanteC3,
                           style: const TextStyle(
-                              fontSize: 22, fontWeight: FontWeight.bold),
+                              fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                         if (mostrarResultante)
                           SizedBox(
@@ -1333,442 +1738,11 @@ class _CalFuerzasIsoscelesState extends State<CalFuerzasIsosceles> {
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
-      // 3. Mostrar el banner si ya cargó
-      bottomNavigationBar: _isLoaded
-          // ignore: sized_box_for_whitespace
-          ? Container(
-              height: _miBanner!.size.height.toDouble(),
-              width: _miBanner!.size.width.toDouble(),
-              child: AdWidget(ad: _miBanner!),
-            )
-          : null,
-    );
-  }
-
-/////////////////////
-
-  Widget _buildCase3() {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.blue,
-        title: const Text(
-          "Fuerza Eléctrica",
-          style: TextStyle(color: Colors.white),
-        ),
-        centerTitle: true,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.help_outline),
-            onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const Informacion()));
-            },
-          ),
-        ],
-      ),
-      body: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Padding(
-          padding: const EdgeInsets.all(15),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Card(
-                    elevation: 5,
-                    child: Column(
-                      children: [
-                        const Text(
-                          "Carga N1",
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
-                        ),
-                        SizedBox(
-                          height: 160,
-                          width: 100,
-                          child: Flutter3DViewer(
-                            controller: _controller,
-                            src: widget.modelocarga1,
-                            progressBarColor: Colors.blue,
-                            activeGestureInterceptor: true,
-                            enableTouch: true,
-                            onProgress: (double progressValue) {
-                              debugPrint(
-                                  'Carga del Modelo en Proceso : $progressValue');
-                            },
-                            onLoad: (String modelAddress) {
-                              debugPrint('Modelo Cargando : $modelAddress');
-                            },
-                            onError: (String error) {
-                              debugPrint('Modelo Fallo al Cargar : $error');
-                            },
-                          ),
-                        ),
-                        Text(
-                          ' ${widget.carga1.toStringAsFixed(2)}',
-                          style: const TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
-                        )
-                      ],
-                    ),
-                  ),
-                  Card(
-                    elevation: 5,
-                    child: Column(
-                      children: [
-                        const Text(
-                          "Carga N2",
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
-                        ),
-                        SizedBox(
-                          height: 160,
-                          width: 100,
-                          child: Flutter3DViewer(
-                            controller: _controller,
-                            src: widget.modelocarga2,
-                            progressBarColor: Colors.blue,
-                            activeGestureInterceptor: true,
-                            enableTouch: true,
-                            onProgress: (double progressValue) {
-                              debugPrint(
-                                  'Carga del Modelo en Proceso : $progressValue');
-                            },
-                            onLoad: (String modelAddress) {
-                              debugPrint('Modelo Cargando : $modelAddress');
-                            },
-                            onError: (String error) {
-                              debugPrint('Modelo Fallo al Cargar : $error');
-                            },
-                          ),
-                        ),
-                        Text(
-                          ' ${widget.carga2.toStringAsFixed(2)}',
-                          style: const TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
-                        )
-                      ],
-                    ),
-                  ),
-                  Card(
-                    elevation: 5,
-                    child: Column(
-                      children: [
-                        const Text(
-                          "Carga N3",
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
-                        ),
-                        SizedBox(
-                          height: 160,
-                          width: 100,
-                          child: Flutter3DViewer(
-                            controller: _controller,
-                            src: widget.modelocarga3,
-                            progressBarColor: Colors.blue,
-                            activeGestureInterceptor: true,
-                            enableTouch: true,
-                            onProgress: (double progressValue) {
-                              debugPrint(
-                                  'Carga del Modelo en Proceso : $progressValue');
-                            },
-                            onLoad: (String modelAddress) {
-                              debugPrint('Modelo Cargando : $modelAddress');
-                            },
-                            onError: (String error) {
-                              debugPrint('Modelo Fallo al Cargar : $error');
-                            },
-                          ),
-                        ),
-                        Text(
-                          ' ${widget.carga3.toStringAsFixed(2)}',
-                          style: const TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
-                        )
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
-              Card(
-                elevation: 5,
-                child: Column(
-                  children: [
-                    Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          const Text(
-                            "Sentido de las Fuerzas",
-                            style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold),
-                          ),
-                          BotonAR(),
-                        ]),
-                    SizedBox(
-                      height: 280,
-                      width: 400,
-                      child: Flutter3DViewer(
-                        controller: _controller,
-                        src: widget.combinacion3d,
-                        progressBarColor: Colors.blue,
-                        activeGestureInterceptor: true,
-                        enableTouch: true,
-                        onProgress: (double progressValue) {
-                          debugPrint(
-                              'Carga del Modelo en Proceso : $progressValue');
-                        },
-                        onLoad: (String modelAddress) {
-                          debugPrint('Modelo Cargando : $modelAddress');
-                        },
-                        onError: (String error) {
-                          debugPrint('Modelo Fallo al Cargar : $error');
-                        },
-                      ),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.all(5),
-                      decoration: const BoxDecoration(
-                          color: Colors.blue,
-                          borderRadius: BorderRadius.all(Radius.circular(5))),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          ElevatedButton(
-                              onPressed: () {
-                                setState(() {
-                                  estaPlay = !estaPlay;
-
-                                  if (estaPlay) {
-                                    _controller.playAnimation();
-                                  } else {
-                                    _controller.pauseAnimation();
-                                  }
-                                });
-                              },
-                              child: Icon(estaPlay
-                                  ? Icons.pause_outlined
-                                  : Icons.play_arrow_rounded)),
-                          const SizedBox(
-                            width: 20,
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              const SizedBox(height: 20),
-              const Text(
-                "Digite el sentido de las componentes",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 10),
-              _buildForceComponent(
-                  "Sentido de las Fuerza (3 y 1)", signoX1, signoY1,
-                  (newX, newY) {
-                setState(() {
-                  signoX1 = newX;
-                  signoY1 = newY;
-                });
-              }),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  setState(() {
-                    actualizarMensajes();
-                    mostrarResultante = true;
-                  });
-                },
-                style: ButtonStyle(
-                  backgroundColor: WidgetStateProperty.all(Colors.blue),
-                  elevation: WidgetStateProperty.all(10),
-                ),
-                child: const Text(
-                  "Ingresar los signos",
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-              const SizedBox(height: 20),
-              Card(
-                elevation: 5,
-                margin: const EdgeInsets.symmetric(vertical: 10),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: SizedBox(
-                    width: 400,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        const Text(
-                          "Magnitud de las Fuerzas",
-                          style: TextStyle(
-                              fontSize: 19, fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(height: 10),
-                        Text(
-                          mensajeResultadoC3,
-                          style: const TextStyle(fontSize: 16),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-              Card(
-                elevation: 5,
-                margin: const EdgeInsets.symmetric(vertical: 10),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: SizedBox(
-                    width: 400,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        const Text(
-                          "Fuerzas con Dirección y Componentes",
-                          style: TextStyle(
-                              fontSize: 19, fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(height: 10),
-                        Text(
-                          mensajeComponentesC3,
-                          style: const TextStyle(fontSize: 16),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-              Card(
-                elevation: 5,
-                margin: const EdgeInsets.symmetric(vertical: 10),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: SizedBox(
-                    width: 400,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        const Text(
-                          "Sumas de las Fuerzas",
-                          style: TextStyle(
-                              fontSize: 19, fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(height: 10),
-                        Text(
-                          mensajesumasC3,
-                          style: const TextStyle(fontSize: 16),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-              Card(
-                elevation: 5,
-                margin: const EdgeInsets.symmetric(vertical: 10),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          const Text(
-                            "Magnitud de la F. Resultante",
-                            style: TextStyle(
-                                fontSize: 19, fontWeight: FontWeight.bold),
-                          ),
-                          BotonAR(mostrarResultante: true),
-                        ],
-                      ),
-                      const SizedBox(height: 10),
-                      Text(
-                        mensajeFresultanteC3,
-                        style: const TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
-                      ),
-                      if (mostrarResultante)
-                        SizedBox(
-                          height: 280,
-                          child: Flutter3DViewer(
-                            controller: _controllerResult,
-                            src: widget.resultante3d,
-                            progressBarColor: Colors.blue,
-                            activeGestureInterceptor: true,
-                            enableTouch: true,
-                            onProgress: (double progressValue) {
-                              debugPrint(
-                                  'Carga del Modelo en Proceso : $progressValue');
-                            },
-                            onLoad: (String modelAddress) {
-                              debugPrint('Modelo Cargando : $modelAddress');
-                            },
-                            onError: (String error) {
-                              debugPrint('Modelo Fallo al Cargar : $error');
-                            },
-                          ),
-                        ),
-                      if (mostrarResultante)
-                        Container(
-                          margin: const EdgeInsets.all(5),
-                          decoration: const BoxDecoration(
-                              color: Colors.blue,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(5))),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              ElevatedButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      resultPlay = !resultPlay;
-
-                                      if (resultPlay) {
-                                        _controllerResult.playAnimation();
-                                      } else {
-                                        _controllerResult.pauseAnimation();
-                                      }
-                                    });
-                                  },
-                                  child: Icon(resultPlay
-                                      ? Icons.pause_outlined
-                                      : Icons.play_arrow_rounded)),
-                              const SizedBox(
-                                width: 20,
-                              ),
-                            ],
-                          ),
-                        )
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-      // 3. Mostrar el banner si ya cargó
-      bottomNavigationBar: _isLoaded
-          // ignore: sized_box_for_whitespace
-          ? Container(
-              height: _miBanner!.size.height.toDouble(),
-              width: _miBanner!.size.width.toDouble(),
-              child: AdWidget(ad: _miBanner!),
-            )
-          : null,
     );
   }
 
