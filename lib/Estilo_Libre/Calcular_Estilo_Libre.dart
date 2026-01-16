@@ -36,7 +36,7 @@ class _CalcularEstiloLibreState extends State<CalcularEstiloLibre> {
     _realizarCalculos();
 
     // 1. Inicializar el banner usando tu clase
-    _miBanner = CargarAnuncios.crearBanner()
+    _miBanner = CargarAnuncios.crearBanner("banner_estilo_libre")
       ..load().then((_) {
         setState(() {
           _isLoaded = true;

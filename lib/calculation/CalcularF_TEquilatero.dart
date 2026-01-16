@@ -1768,7 +1768,7 @@ class _CalFuerzasIsoscelesState extends State<CalFuerzasIsosceles> {
     return ElevatedButton(
       onPressed: () {
         // Cargar anuncio
-        CargarAnuncios.mostrarIntersticial();
+        CargarAnuncios.mostrarIntersticial("inter_ar");
 
         Navigator.push(
           context,

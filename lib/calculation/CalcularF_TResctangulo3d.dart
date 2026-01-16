@@ -1812,7 +1812,7 @@ class _CalFuerzasRectanguloState extends State<CalFuerzasRectangulo> {
     return ElevatedButton(
       onPressed: () {
         // Cargar anuncio
-        CargarAnuncios.mostrarIntersticial();
+        CargarAnuncios.mostrarIntersticial("inter_ar");
         Navigator.push(
           context,
           MaterialPageRoute(

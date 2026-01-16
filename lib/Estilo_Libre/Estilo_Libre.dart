@@ -57,7 +57,7 @@ class _Estilo_LibreState extends State<Estilo_Libre>
     super.initState();
 
     // Cargar anuncio
-    CargarAnuncios.mostrarIntersticial();
+    CargarAnuncios.mostrarIntersticial("inter_estilo_libre");
 
     _tabController = TabController(length: 2, vsync: this);
     _inicializarZoom();
@@ -883,7 +883,7 @@ class _Estilo_LibreState extends State<Estilo_Libre>
                         ));
 
                         // Cargar anuncio
-                        CargarAnuncios.mostrarIntersticial();
+                        CargarAnuncios.mostrarIntersticial("inter_guardar");
                       } catch (e) {
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                           content: Text("Error al guardar: $e"),

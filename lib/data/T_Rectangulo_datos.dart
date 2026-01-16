@@ -397,7 +397,7 @@ class _T_Rectangulo_datosState extends State<T_Rectangulo_datos> {
       );
       
       // Cargar anuncio
-      CargarAnuncios.mostrarIntersticial();
+      CargarAnuncios.mostrarIntersticial("inter_guardar");
     }
 
     // 🔹 Ir al resultado

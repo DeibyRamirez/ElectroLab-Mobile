@@ -5,36 +5,49 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'dart:io';
 
 class CargarAnuncios {
-  static String get bannerAdUnitId => Platform.isAndroid
-      ? 'ca-app-pub-3940256099942544/6300978111'
-      : 'ca-app-pub-3940256099942544/2934735716';
-
-  static String get interstitialAdUnitId => Platform.isAndroid
-      ? 'ca-app-pub-3940256099942544/5224354917'
-      : 'ca-app-pub-3940256099942544/6300978111';
+  // 1. DICCIONARIO DE IDS (Agrega aquí tus IDs reales de AdMob)
+  static Map<String, String> get ids {
+    if (Platform.isAndroid) {
+      return {
+        'banner_prefijos': 'ca-app-pub-1195123066634718/4895585448',
+        'banner_principal': 'ca-app-pub-1195123066634718/2786822070',
+        'banner_quiz': 'ca-app-pub-1195123066634718/6208667118',
+        'banner_estilo_libre': 'ca-app-pub-1195123066634718/1877962875',
+        'inter_ar': 'ca-app-pub-1195123066634718/5019708529',
+        'inter_guardar': 'ca-app-pub-1195123066634718/6953120186',
+        'inter_estilo_libre': 'ca-app-pub-1195123066634718/8251799536',
+      };
+    } else {
+      // IDs para iOS
+      return {
+        'banner_home': 'ca-app-pub-1195123066634718/2786822070',
+        'banner_perfil': 'ca-app-pub-1195123066634718/2786822070',
+        'inter_login': 'ca-app-pub-1195123066634718/6953120186',
+      };
+    }
+  }
 
   /// --- LÓGICA PARA BANNER ---
-  static BannerAd crearBanner() {
+  /// Ahora acepta un [posicion] para saber qué ID usar
+  static BannerAd crearBanner(String posicion) {
     return BannerAd(
-      adUnitId: bannerAdUnitId,
+      adUnitId: ids[posicion] ?? ids.values.first, // Usa uno por defecto si falla
       size: AdSize.banner,
       request: const AdRequest(),
       listener: BannerAdListener(
         onAdFailedToLoad: (ad, error) {
           ad.dispose();
-          print('Error al cargar banner: $error');
+          print('Error al cargar banner ($posicion): $error');
         },
       ),
     );
   }
 
-  /// --- LÓGICA PARA INTERSTICIAL CON VERIFICACIÓN DE PAGO ---
-  static Future<void> mostrarIntersticial() async {
+  /// --- LÓGICA PARA INTERSTICIAL ---
+  static Future<void> mostrarIntersticial(String posicion) async {
     try {
       final user = FirebaseAuth.instance.currentUser;
       
-      // 1. Si no hay usuario, por seguridad podrías mostrar anuncio o no. 
-      // Aquí verificamos si tiene el beneficio:
       if (user != null) {
         final doc = await FirebaseFirestore.instance
             .collection("usuarios")
@@ -43,31 +56,20 @@ class CargarAnuncios {
 
         if (doc.exists) {
           final data = doc.data() as Map<String, dynamic>;
-          bool quitarAnuncios = data['quitarAnuncios'] ?? false;
-
-          // 2. SI EL USUARIO PAGÓ, SALIMOS DE LA FUNCIÓN Y NO HACEMOS NADA
-          if (quitarAnuncios) {
-            print("Usuario con Premium: Intersticial omitido.");
-            return;
-          }
+          if (data['quitarAnuncios'] ?? false) return;
         }
       }
 
-      // 3. SI NO HA PAGADO (O NO HAY DATOS), CARGAMOS Y MOSTRAMOS
       InterstitialAd.load(
-        adUnitId: interstitialAdUnitId,
+        adUnitId: ids[posicion] ?? ids['inter_login']!,
         request: const AdRequest(),
         adLoadCallback: InterstitialAdLoadCallback(
-          onAdLoaded: (ad) {
-            ad.show();
-          },
-          onAdFailedToLoad: (error) {
-            print('Error al cargar intersticial: $error');
-          },
+          onAdLoaded: (ad) => ad.show(),
+          onAdFailedToLoad: (error) => print('Error en $posicion: $error'),
         ),
       );
     } catch (e) {
-      print("Error verificando estatus de anuncios: $e");
+      print("Error: $e");
     }
   }
 }

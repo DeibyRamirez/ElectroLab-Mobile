@@ -948,7 +948,7 @@ class _CalcularFLineal3dState extends State<CalcularFLineal3d> {
       onPressed: () {
 
         // Cargar anuncio
-        CargarAnuncios.mostrarIntersticial();
+        CargarAnuncios.mostrarIntersticial("inter_ar");
         
         Navigator.push(
           context,

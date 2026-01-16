@@ -400,7 +400,7 @@ class _T_Equilatero_datosState extends State<T_Equilatero_datos> {
                     );
 
                     // Cargar anuncio
-                    CargarAnuncios.mostrarIntersticial();
+                    CargarAnuncios.mostrarIntersticial("inter_guardar");
                   }
 
                   Navigator.push(

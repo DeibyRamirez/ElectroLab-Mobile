@@ -27,7 +27,7 @@ class _AdBannerWrapperState extends State<AdBannerWrapper> {
   }
 
   void _initAd() {
-    _miBanner = CargarAnuncios.crearBanner()
+    _miBanner = CargarAnuncios.crearBanner("banner_home")
       ..load().then((_) {
         if (mounted) setState(() => _isLoaded = true);
       });

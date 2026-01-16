@@ -351,7 +351,7 @@ class _Lineal_datosState extends State<Lineal_datos> {
       );
 
       // Cargar anuncio
-      CargarAnuncios.mostrarIntersticial();
+      CargarAnuncios.mostrarIntersticial("inter_guardar");
     }
 
 // Validar que las cargas sean números enteros
