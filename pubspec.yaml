@@ -16,7 +16,11 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 1.0.0+9
+
+# el primer numero es la versión principal: cuando hay cambios grandes, que llegaron al tope "9" del numero secundario
+# el segundo numero es la versión secundaria: cuando hay cambios medianos, como nuevas funcionalidades.
+# el tercer numero es la versión de parche: cuando hay correcciones menores, arreglos de bugs, mejoras pequeñas.
+version: 1.0.1+0
 
 environment:
   sdk: ">=3.4.3 <4.0.0"
