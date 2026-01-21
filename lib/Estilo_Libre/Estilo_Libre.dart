@@ -1,11 +1,13 @@
 // lib/Estilo_Libre.dart
 
-// ignore_for_file: camel_case_types, deprecated_member_use, file_names, use_build_context_synchronously
+// ignore_for_file: camel_case_types, deprecated_member_use, file_names, use_build_context_synchronously, avoid_print
 
 import 'package:flutter/material.dart';
 import 'package:graficos_dinamicos/Anuncios/CargarAnuncios.dart';
 import 'package:graficos_dinamicos/Estilo_Libre/Plano.dart';
 import 'package:graficos_dinamicos/Estilo_libre/Calcular_Estilo_libre.dart';
+import 'package:graficos_dinamicos/Firebase/service/creditos_usuario.dart';
+import 'package:graficos_dinamicos/auth/auth_helper.dart';
 import 'package:graficos_dinamicos/others/Informacion.dart';
 import 'package:graficos_dinamicos/Firebase/service/historial_service.dart';
 
@@ -52,9 +54,14 @@ class _Estilo_LibreState extends State<Estilo_Libre>
   static const double _maxScale = 4.0;
   static const double _initialScale = 1.2;
 
+  final uid = AuthHelper.uid;
+  int creditosUsuario = 0; // ✅ Inicializar en 0
+  bool cargandoCreditos = true; // ✅ Estado de carga
+
   @override
   void initState() {
     super.initState();
+    _cargarCreditos();
 
     // Cargar anuncio
     CargarAnuncios.mostrarIntersticial("inter_estilo_libre");
@@ -110,6 +117,56 @@ class _Estilo_LibreState extends State<Estilo_Libre>
   void _zoomOut(TransformationController controller) {
     final matrix = Matrix4.identity()..scale(_minScale);
     controller.value = matrix;
+  }
+
+  // ✅ Método para cargar créditos
+  Future<void> _cargarCreditos() async {
+    print('🔵 Iniciando carga de créditos...');
+    print('🔵 UID: $uid');
+    print('🔵 UID está vacío: ${uid.isEmpty}');
+
+    if (uid.isEmpty) {
+      print('❌ ERROR: UID está vacío');
+      if (mounted) {
+        setState(() {
+          creditosUsuario = 0;
+          cargandoCreditos = false;
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Error: Usuario no autenticado'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+      return;
+    }
+
+    try {
+      print('🔵 Llamando a obtenerCreditosUsuario...');
+      final creditos = await obtenerCreditosUsuario(uid);
+      print('✅ Créditos obtenidos: $creditos');
+      print('🔵 Widget montado: $mounted'); // ⬅️ NUEVO LOG
+
+      if (mounted) {
+        print('🔵 Actualizando estado...'); // ⬅️ NUEVO LOG
+        setState(() {
+          creditosUsuario = creditos;
+          cargandoCreditos = false;
+        });
+        print('✅ Estado actualizado'); // ⬅️ NUEVO LOG
+      } else {
+        print('❌ Widget no montado, no se puede actualizar estado');
+      }
+    } catch (e) {
+      print('❌ Error al cargar créditos: $e');
+      if (mounted) {
+        setState(() {
+          creditosUsuario = 0;
+          cargandoCreditos = false;
+        });
+      }
+    }
   }
 
   @override
@@ -898,6 +955,9 @@ class _Estilo_LibreState extends State<Estilo_Libre>
                         builder: (context) => CalcularEstiloLibre(
                           cargas: cargas,
                           cargaBase: cargaSeleccionada,
+                          creditosUsuario: creditosUsuario,
+                          
+                          
                         ),
                       ),
                     );

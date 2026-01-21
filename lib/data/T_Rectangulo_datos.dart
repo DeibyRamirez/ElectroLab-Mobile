@@ -5,6 +5,8 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:graficos_dinamicos/Anuncios/CargarAnuncios.dart';
+import 'package:graficos_dinamicos/Firebase/service/creditos_usuario.dart';
+import 'package:graficos_dinamicos/auth/auth_helper.dart';
 import 'package:graficos_dinamicos/calculation/CalcularF_TResctangulo3d.dart';
 import 'package:graficos_dinamicos/calculation/tabla_prefijos.dart';
 import 'package:graficos_dinamicos/Firebase/service/historial_service.dart';
@@ -27,6 +29,7 @@ class _T_Rectangulo_datosState extends State<T_Rectangulo_datos> {
   @override
   void initState() {
     super.initState();
+    _cargarCreditos(); // Cargar creditos al iniciar.
 
     if (widget.initialData != null) {
       final data = widget.initialData!;
@@ -101,6 +104,60 @@ class _T_Rectangulo_datosState extends State<T_Rectangulo_datos> {
     'mC': pow(10, -3).toDouble(),
     'pC': pow(10, -12).toDouble(),
   };
+
+  final uid = AuthHelper.uid;
+  int creditosUsuario = 0; // ✅ Inicializar en 0
+  bool cargandoCreditos = true; // ✅ Estado de carga
+
+  // ✅ Método para cargar créditos
+  Future<void> _cargarCreditos() async {
+    print('🔵 Iniciando carga de créditos...');
+    print('🔵 UID: $uid');
+    print('🔵 UID está vacío: ${uid.isEmpty}');
+
+    if (uid.isEmpty) {
+      print('❌ ERROR: UID está vacío');
+      if (mounted) {
+        setState(() {
+          creditosUsuario = 0;
+          cargandoCreditos = false;
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Error: Usuario no autenticado'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+      return;
+    }
+
+    try {
+      print('🔵 Llamando a obtenerCreditosUsuario...');
+      final creditos = await obtenerCreditosUsuario(uid);
+      print('✅ Créditos obtenidos: $creditos');
+      print('🔵 Widget montado: $mounted'); // ⬅️ NUEVO LOG
+
+      if (mounted) {
+        print('🔵 Actualizando estado...'); // ⬅️ NUEVO LOG
+        setState(() {
+          creditosUsuario = creditos;
+          cargandoCreditos = false;
+        });
+        print('✅ Estado actualizado'); // ⬅️ NUEVO LOG
+      } else {
+        print('❌ Widget no montado, no se puede actualizar estado');
+      }
+    } catch (e) {
+      print('❌ Error al cargar créditos: $e');
+      if (mounted) {
+        setState(() {
+          creditosUsuario = 0;
+          cargandoCreditos = false;
+        });
+      }
+    }
+  }
 
   @override
   void dispose() {
@@ -395,7 +452,7 @@ class _T_Rectangulo_datosState extends State<T_Rectangulo_datos> {
         nombre: nombre,
         ejemplo: "rectángulo",
       );
-      
+
       // Cargar anuncio
       CargarAnuncios.mostrarIntersticial("inter_guardar");
     }
@@ -421,6 +478,7 @@ class _T_Rectangulo_datosState extends State<T_Rectangulo_datos> {
           carga1convertida: carga1Convertida,
           carga2convertida: carga2Convertida,
           carga3convertida: carga3Convertida,
+          creditosUsuario: creditosUsuario,
         ),
       ),
     );

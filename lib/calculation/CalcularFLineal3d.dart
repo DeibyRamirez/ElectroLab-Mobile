@@ -2,6 +2,7 @@
 
 import 'dart:math';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_3d_controller/flutter_3d_controller.dart';
@@ -9,7 +10,9 @@ import 'package:graficos_dinamicos/AR/AR.dart';
 import 'package:graficos_dinamicos/AR/UtilidadesAr.dart';
 import 'package:graficos_dinamicos/Anuncios/AdBannerWrapper.dart';
 import 'package:graficos_dinamicos/Anuncios/CargarAnuncios.dart';
+import 'package:graficos_dinamicos/Firebase/service/creditos_usuario.dart';
 import 'package:graficos_dinamicos/others/Informacion.dart';
+import 'package:graficos_dinamicos/widgets/blur-content.dart';
 import 'NotacionCientifica.dart';
 
 class CalcularFLineal3d extends StatefulWidget {
@@ -32,6 +35,8 @@ class CalcularFLineal3d extends StatefulWidget {
   final double carga2convertida;
   final double carga3convertida;
 
+  final int creditosUsuario;
+
   double fuerza12 = 0;
   double fuerza13 = 0;
   double fuerza23 = 0;
@@ -51,6 +56,7 @@ class CalcularFLineal3d extends StatefulWidget {
     required this.carga1convertida,
     required this.carga2convertida,
     required this.carga3convertida,
+    required this.creditosUsuario,
   });
 
   @override
@@ -111,6 +117,7 @@ class _CalcularFLineal3dState extends State<CalcularFLineal3d> {
 
   late Map<String, Map<String, dynamic>> mapaseleccionado;
 
+  final uid = FirebaseAuth.instance.currentUser!.uid;
 
   @override
   void initState() {
@@ -321,7 +328,8 @@ class _CalcularFLineal3dState extends State<CalcularFLineal3d> {
                                 const Text(
                                   "Carga N1",
                                   style: TextStyle(
-                                      fontSize: 20, fontWeight: FontWeight.bold),
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold),
                                 ),
                                 SizedBox(
                                   height: 160,
@@ -349,7 +357,8 @@ class _CalcularFLineal3dState extends State<CalcularFLineal3d> {
                                 Text(
                                   ' ${widget.carga1.toStringAsFixed(2)}',
                                   style: const TextStyle(
-                                      fontSize: 16, fontWeight: FontWeight.bold),
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold),
                                 )
                               ],
                             ),
@@ -361,7 +370,8 @@ class _CalcularFLineal3dState extends State<CalcularFLineal3d> {
                                 const Text(
                                   "Carga N2",
                                   style: TextStyle(
-                                      fontSize: 20, fontWeight: FontWeight.bold),
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold),
                                 ),
                                 SizedBox(
                                   height: 160,
@@ -389,7 +399,8 @@ class _CalcularFLineal3dState extends State<CalcularFLineal3d> {
                                 Text(
                                   ' ${widget.carga2.toStringAsFixed(2)}',
                                   style: const TextStyle(
-                                      fontSize: 16, fontWeight: FontWeight.bold),
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold),
                                 )
                               ],
                             ),
@@ -401,7 +412,8 @@ class _CalcularFLineal3dState extends State<CalcularFLineal3d> {
                                 const Text(
                                   "Carga N3",
                                   style: TextStyle(
-                                      fontSize: 20, fontWeight: FontWeight.bold),
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold),
                                 ),
                                 SizedBox(
                                   height: 160,
@@ -429,7 +441,8 @@ class _CalcularFLineal3dState extends State<CalcularFLineal3d> {
                                 Text(
                                   ' ${widget.carga3.toStringAsFixed(2)}',
                                   style: const TextStyle(
-                                      fontSize: 16, fontWeight: FontWeight.bold),
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold),
                                 )
                               ],
                             ),
@@ -442,7 +455,8 @@ class _CalcularFLineal3dState extends State<CalcularFLineal3d> {
                         child: Column(
                           children: [
                             Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
                                 children: [
                                   const Text(
                                     "Sentido de las Fuerzas",
@@ -486,7 +500,7 @@ class _CalcularFLineal3dState extends State<CalcularFLineal3d> {
                                       onPressed: () {
                                         setState(() {
                                           estaPlay = !estaPlay;
-      
+
                                           if (estaPlay) {
                                             _controller.playAnimation();
                                           } else {
@@ -515,7 +529,8 @@ class _CalcularFLineal3dState extends State<CalcularFLineal3d> {
                             child: Column(children: [
                               const Text("Digite el sentido de las Fuerzas",
                                   style: TextStyle(
-                                      fontSize: 22, fontWeight: FontWeight.bold)),
+                                      fontSize: 22,
+                                      fontWeight: FontWeight.bold)),
                               const SizedBox(height: 20),
                               Text(mapaseleccionado['mensajes']?['sentidoF1']),
                               const SizedBox(height: 20),
@@ -614,178 +629,204 @@ class _CalcularFLineal3dState extends State<CalcularFLineal3d> {
                         ),
                       ),
                       const SizedBox(height: 10),
-                      Card(
-                        elevation: 5,
-                        margin: const EdgeInsets.symmetric(vertical: 10),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: SizedBox(
-                            width: 400,
-                            child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  const Text(
-                                    "Magnitud de las Fuerzas",
-                                    style: TextStyle(
-                                        fontSize: 19,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                    width: 400,
-                                  ),
-                                  Text(
-                                    mapaseleccionado['mensajes']?['resultado'],
-                                    style: const TextStyle(fontSize: 16),
-                                  ),
-                                ]),
-                          ),
-                        ),
-                      ),
-                      Card(
-                          elevation: 5,
-                          margin: const EdgeInsets.symmetric(vertical: 10),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8),
-                            child: SizedBox(
-                              width: 400,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  const Text(
-                                    "Fuerzas con Dirección",
-                                    style: TextStyle(
-                                        fontSize: 19,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                    width: 400,
-                                  ),
-                                  Text(
-                                    mapaseleccionado['mensajes']?['signos'],
-                                    style: const TextStyle(fontSize: 16),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          )),
-                      const SizedBox(height: 10),
-                      Card(
-                          elevation: 5,
-                          margin: const EdgeInsets.symmetric(vertical: 10),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8),
-                            child: SizedBox(
-                              width: 400,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  const Text(
-                                    "Sumatoria de Fuerzas",
-                                    style: TextStyle(
-                                        fontSize: 19,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  const SizedBox(height: 10),
-                                  Text(
-                                    mapaseleccionado['mensajes']?['sumas'],
-                                    style: const TextStyle(fontSize: 16),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          )),
-                      const SizedBox(height: 10),
-                      Card(
-                        elevation: 5,
-                        margin: const EdgeInsets.symmetric(vertical: 10),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8),
+                      IntrinsicHeight(
+                        child: BlurContent(
+                          userCredits: widget.creditosUsuario,
+                          cost: 5,
+                          onUnlock: () async {
+                            descontarCreditosUsuario(uid, 5);
+                          },
                           child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.min,
                             children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                children: [
-                                  const Text(
-                                    "Fuerza Resultante",
-                                    style: TextStyle(
-                                        fontSize: 19,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  BotonAR(mostrarResultante: true),
-                                ],
-                              ),
-                              Text(
-                                mapaseleccionado['resultados']
-                                    ?['fuerzaResultante'],
-                                style: const TextStyle(
-                                    fontSize: 22, fontWeight: FontWeight.bold),
-                              ),
-                              if (mostrarResultante)
-                                SizedBox(
-                                  height: 300,
-                                  child: Center(
-                                    child: Flutter3DViewer(
-                                      controller: _controllerResult,
-                                      src: resultante3d,
-                                      progressBarColor: Colors.blue,
-                                      activeGestureInterceptor: true,
-                                      enableTouch: true,
-                                      onProgress: (double progressValue) {
-                                        debugPrint(
-                                            'Carga del Modelo en Proceso : $progressValue');
-                                      },
-                                      onLoad: (String modelAddress) {
-                                        debugPrint(
-                                            'Modelo Cargando : $modelAddress');
-                                      },
-                                      onError: (String error) {
-                                        debugPrint(
-                                            'Modelo Fallo al Cargar : $error');
-                                      },
-                                    ),
+                              Card(
+                                elevation: 5,
+                                margin: const EdgeInsets.symmetric(vertical: 10),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: SizedBox(
+                                    width: 400,
+                                    child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          const Text(
+                                            "Magnitud de las Fuerzas",
+                                            style: TextStyle(
+                                                fontSize: 19,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          const SizedBox(
+                                            height: 10,
+                                            width: 400,
+                                          ),
+                                          Text(
+                                            mapaseleccionado['mensajes']
+                                                ?['resultado'],
+                                            style: const TextStyle(fontSize: 16),
+                                          ),
+                                        ]),
                                   ),
                                 ),
-                              if (mostrarResultante)
-                                Container(
-                                  margin: const EdgeInsets.all(5),
-                                  decoration: const BoxDecoration(
-                                      color: Colors.blue,
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(5))),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      ElevatedButton(
-                                          onPressed: () {
-                                            setState(() {
-                                              resultPlay = !resultPlay;
-      
-                                              if (resultPlay) {
-                                                _controllerResult.playAnimation();
-                                              } else {
-                                                _controllerResult
-                                                    .pauseAnimation();
-                                              }
-                                            });
-                                          },
-                                          child: Icon(resultPlay
-                                              ? Icons.pause_outlined
-                                              : Icons.play_arrow_rounded)),
-                                      const SizedBox(
-                                        width: 20,
+                              ),
+                              Card(
+                                  elevation: 5,
+                                  margin:
+                                      const EdgeInsets.symmetric(vertical: 10),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8),
+                                    child: SizedBox(
+                                      width: 400,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          const Text(
+                                            "Fuerzas con Dirección",
+                                            style: TextStyle(
+                                                fontSize: 19,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          const SizedBox(
+                                            height: 10,
+                                            width: 400,
+                                          ),
+                                          Text(
+                                            mapaseleccionado['mensajes']
+                                                ?['signos'],
+                                            style: const TextStyle(fontSize: 16),
+                                          ),
+                                        ],
                                       ),
+                                    ),
+                                  )),
+                              const SizedBox(height: 10),
+                              Card(
+                                  elevation: 5,
+                                  margin:
+                                      const EdgeInsets.symmetric(vertical: 10),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8),
+                                    child: SizedBox(
+                                      width: 400,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          const Text(
+                                            "Sumatoria de Fuerzas",
+                                            style: TextStyle(
+                                                fontSize: 19,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          const SizedBox(height: 10),
+                                          Text(
+                                            mapaseleccionado['mensajes']
+                                                ?['sumas'],
+                                            style: const TextStyle(fontSize: 16),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  )),
+                              const SizedBox(height: 10),
+                              Card(
+                                elevation: 5,
+                                margin: const EdgeInsets.symmetric(vertical: 10),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceAround,
+                                        children: [
+                                          const Text(
+                                            "Fuerza Resultante",
+                                            style: TextStyle(
+                                                fontSize: 19,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          BotonAR(mostrarResultante: true),
+                                        ],
+                                      ),
+                                      Text(
+                                        mapaseleccionado['resultados']
+                                            ?['fuerzaResultante'],
+                                        style: const TextStyle(
+                                            fontSize: 22,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      if (mostrarResultante)
+                                        SizedBox(
+                                          height: 300,
+                                          child: Center(
+                                            child: Flutter3DViewer(
+                                              controller: _controllerResult,
+                                              src: resultante3d,
+                                              progressBarColor: Colors.blue,
+                                              activeGestureInterceptor: true,
+                                              enableTouch: true,
+                                              onProgress: (double progressValue) {
+                                                debugPrint(
+                                                    'Carga del Modelo en Proceso : $progressValue');
+                                              },
+                                              onLoad: (String modelAddress) {
+                                                debugPrint(
+                                                    'Modelo Cargando : $modelAddress');
+                                              },
+                                              onError: (String error) {
+                                                debugPrint(
+                                                    'Modelo Fallo al Cargar : $error');
+                                              },
+                                            ),
+                                          ),
+                                        ),
+                                      if (mostrarResultante)
+                                        Container(
+                                          margin: const EdgeInsets.all(5),
+                                          decoration: const BoxDecoration(
+                                              color: Colors.blue,
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(5))),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              ElevatedButton(
+                                                  onPressed: () {
+                                                    setState(() {
+                                                      resultPlay = !resultPlay;
+                        
+                                                      if (resultPlay) {
+                                                        _controllerResult
+                                                            .playAnimation();
+                                                      } else {
+                                                        _controllerResult
+                                                            .pauseAnimation();
+                                                      }
+                                                    });
+                                                  },
+                                                  child: Icon(resultPlay
+                                                      ? Icons.pause_outlined
+                                                      : Icons
+                                                          .play_arrow_rounded)),
+                                              const SizedBox(
+                                                width: 20,
+                                              ),
+                                            ],
+                                          ),
+                                        )
                                     ],
                                   ),
-                                )
+                                ),
+                              )
                             ],
                           ),
                         ),
                       )
                     ]))),
-        
       ),
     );
   }
@@ -946,10 +987,9 @@ class _CalcularFLineal3dState extends State<CalcularFLineal3d> {
 
     return ElevatedButton(
       onPressed: () {
-
         // Cargar anuncio
         CargarAnuncios.mostrarIntersticial("inter_ar");
-        
+
         Navigator.push(
           context,
           MaterialPageRoute(

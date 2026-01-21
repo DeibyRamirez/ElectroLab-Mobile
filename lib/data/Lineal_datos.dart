@@ -3,6 +3,8 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:graficos_dinamicos/Anuncios/CargarAnuncios.dart';
+import 'package:graficos_dinamicos/Firebase/service/creditos_usuario.dart';
+import 'package:graficos_dinamicos/auth/auth_helper.dart';
 import 'package:graficos_dinamicos/calculation/CalcularFLineal3d.dart';
 import 'package:graficos_dinamicos/calculation/tabla_prefijos.dart';
 import 'package:graficos_dinamicos/Firebase/service/historial_service.dart';
@@ -10,11 +12,13 @@ import 'package:graficos_dinamicos/Firebase/service/historial_service.dart';
 class Lineal_datos extends StatefulWidget {
   final Map<String, dynamic>? initialData;
   final String? nombreGuardado;
+  final String? uidUsuario;
 
   const Lineal_datos({
     Key? key,
     this.initialData,
     this.nombreGuardado,
+    this.uidUsuario,
   }) : super(key: key);
 
   @override
@@ -50,9 +54,64 @@ class _Lineal_datosState extends State<Lineal_datos> {
     'pC': pow(10, -12).toDouble(),
   };
 
+  final uid = AuthHelper.uid;
+  int creditosUsuario = 0; // ✅ Inicializar en 0
+  bool cargandoCreditos = true; // ✅ Estado de carga
+
+  // ✅ Método para cargar créditos
+  Future<void> _cargarCreditos() async {
+    print('🔵 Iniciando carga de créditos...');
+    print('🔵 UID: $uid');
+    print('🔵 UID está vacío: ${uid.isEmpty}');
+
+    if (uid.isEmpty) {
+      print('❌ ERROR: UID está vacío');
+      if (mounted) {
+        setState(() {
+          creditosUsuario = 0;
+          cargandoCreditos = false;
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Error: Usuario no autenticado'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+      return;
+    }
+
+    try {
+      print('🔵 Llamando a obtenerCreditosUsuario...');
+      final creditos = await obtenerCreditosUsuario(uid);
+      print('✅ Créditos obtenidos: $creditos');
+      print('🔵 Widget montado: $mounted'); // ⬅️ NUEVO LOG
+
+      if (mounted) {
+        print('🔵 Actualizando estado...'); // ⬅️ NUEVO LOG
+        setState(() {
+          creditosUsuario = creditos;
+          cargandoCreditos = false;
+        });
+        print('✅ Estado actualizado'); // ⬅️ NUEVO LOG
+      } else {
+        print('❌ Widget no montado, no se puede actualizar estado');
+      }
+    } catch (e) {
+      print('❌ Error al cargar créditos: $e');
+      if (mounted) {
+        setState(() {
+          creditosUsuario = 0;
+          cargandoCreditos = false;
+        });
+      }
+    }
+  }
+
   @override
   void initState() {
     super.initState();
+    _cargarCreditos(); // ✅ Cargar créditos al iniciar
     if (widget.initialData != null) {
       final data = widget.initialData!;
       String formatNumber(num? value) {
@@ -80,66 +139,94 @@ class _Lineal_datosState extends State<Lineal_datos> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        actions: [
-          IconButton(
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const tabla_prefijos(),
-                    ));
-              },
-              icon: const Icon(Icons.wysiwyg))
-        ],
-        backgroundColor: Colors.blue,
-        centerTitle: true,
-        title: const Text(
-          "Lineal",
-          style: TextStyle(color: Colors.white),
-        ),
+Widget build(BuildContext context) {
+  print('🏗️ BUILD Lineal_datos - cargandoCreditos: $cargandoCreditos, creditosUsuario: $creditosUsuario');
+  
+  return Scaffold(
+    backgroundColor: Colors.white,
+    appBar: AppBar(
+      actions: [
+        IconButton(
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const tabla_prefijos(),
+                  ));
+            },
+            icon: const Icon(Icons.wysiwyg))
+      ],
+      backgroundColor: Colors.blue,
+      centerTitle: true,
+      title: const Text(
+        "Lineal",
+        style: TextStyle(color: Colors.white),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Image.asset('assets/Lineal.jpg'),
-              const SizedBox(height: 20),
-              const Text(
-                "Digite los valores de las cargas con signo, Coulombs (C):",
-                style: TextStyle(fontSize: 18),
-              ),
-              const SizedBox(height: 20),
-              DropdownButton<String>(
-                isExpanded: true,
-                hint: const Text("Seleccione un prefijo (q1)"),
-                value: prefijoseleccionadoCarga1,
-                items: prefijos.map((String prefijo) {
-                  return DropdownMenuItem<String>(
-                    value: prefijo,
-                    child: Text(prefijo),
-                  );
-                }).toList(),
-                onChanged: (String? nuevoValor) {
-                  setState(() {
-                    prefijoseleccionadoCarga1 = nuevoValor;
-                  });
-                },
-              ),
-              const SizedBox(height: 5),
-              TextField(
-                controller: carga1Controller,
-                keyboardType: TextInputType.number,
-                decoration: const InputDecoration(
-                  labelText: 'Carga 1 (q1)',
-                  border: OutlineInputBorder(),
+    ),
+    body: Stack(
+      children: [
+        // ✅ Contenido principal (siempre visible)
+        SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                // ✅ Indicador de carga de créditos (pequeño, arriba)
+                if (cargandoCreditos)
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    margin: const EdgeInsets.only(bottom: 10),
+                    decoration: BoxDecoration(
+                      color: Colors.blue.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        SizedBox(
+                          width: 16,
+                          height: 16,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        ),
+                        SizedBox(width: 10),
+                        Text('Cargando créditos...'),
+                      ],
+                    ),
+                  ),
+                Image.asset('assets/Lineal.jpg'),
+                const SizedBox(height: 20),
+                const Text(
+                  "Digite los valores de las cargas con signo, Coulombs (C):",
+                  style: TextStyle(fontSize: 18),
                 ),
-              ),
+                // ... resto de tu formulario (sin cambios)
+                const SizedBox(height: 20),
+                DropdownButton<String>(
+                  isExpanded: true,
+                  hint: const Text("Seleccione un prefijo (q1)"),
+                  value: prefijoseleccionadoCarga1,
+                  items: prefijos.map((String prefijo) {
+                    return DropdownMenuItem<String>(
+                      value: prefijo,
+                      child: Text(prefijo),
+                    );
+                  }).toList(),
+                  onChanged: (String? nuevoValor) {
+                    setState(() {
+                      prefijoseleccionadoCarga1 = nuevoValor;
+                    });
+                  },
+                ),
+                const SizedBox(height: 5),
+                TextField(
+                  controller: carga1Controller,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
+                    labelText: 'Carga 1 (q1)',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
               const SizedBox(height: 20),
               DropdownButton<String>(
                 isExpanded: true,
@@ -277,7 +364,9 @@ class _Lineal_datosState extends State<Lineal_datos> {
           ),
         ),
       ),
-    );
+  ]
+  ),
+  );
   }
 
   void _calcular() async {
@@ -418,6 +507,7 @@ class _Lineal_datosState extends State<Lineal_datos> {
           carga1convertida: carga1Convertida,
           carga2convertida: carga2Convertida,
           carga3convertida: carga3Convertida,
+          creditosUsuario: creditosUsuario,
         ),
       ),
     );

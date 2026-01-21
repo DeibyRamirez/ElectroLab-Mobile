@@ -1,18 +1,33 @@
 // ignore_for_file: prefer_const_constructors, avoid_print, file_names
 
 import 'dart:math';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:graficos_dinamicos/Anuncios/CargarAnuncios.dart';
 import 'package:graficos_dinamicos/Estilo_Libre/Plano_Resultante.dart';
+import 'package:graficos_dinamicos/Firebase/service/creditos_usuario.dart';
 import 'package:graficos_dinamicos/calculation/Formulas.dart';
+import 'package:graficos_dinamicos/widgets/blur-content.dart';
+
 
 class CalcularEstiloLibre extends StatefulWidget {
-  const CalcularEstiloLibre(
-      {super.key, required this.cargas, required this.cargaBase});
+  
+
+  const CalcularEstiloLibre({  // ⬅️ Agrega 'const' si quieres
+    super.key,
+    required this.cargas,
+    required this.cargaBase,
+    required this.creditosUsuario,
+    
+  });
 
   final List<Map<String, dynamic>> cargas;
   final int cargaBase;
+  final int creditosUsuario;
+  
+
+
 
   @override
   State<CalcularEstiloLibre> createState() => _CalcularEstiloLibreState();
@@ -29,6 +44,8 @@ class _CalcularEstiloLibreState extends State<CalcularEstiloLibre> {
   // Anuncio
   BannerAd? _miBanner;
   bool _isLoaded = false;
+
+  final uid = FirebaseAuth.instance.currentUser!.uid;
 
   @override
   void initState() {
@@ -374,71 +391,86 @@ class _CalcularEstiloLibreState extends State<CalcularEstiloLibre> {
           ),
           const SizedBox(height: 8),
 
-          ...resultadosCalculos
-              .map((resultado) => _buildCalculoDetallado(resultado)),
-
-          const SizedBox(height: 24),
-
-          // Fuerza resultante
-          Card(
-            elevation: 6,
-            color: Colors.blue.shade50,
-            child: Padding(
-              padding: const EdgeInsets.all(16),
+          IntrinsicHeight(
+            child: BlurContent(
+              cost: 5,
+              userCredits: widget.creditosUsuario,
+              onUnlock: () async {
+                descontarCreditosUsuario(uid, 5);
+              },
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Text(
-                    'FUERZA RESULTANTE',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.blue,
-                    ),
-                  ),
-                  const Divider(),
-                  Text(
-                    'Componentes de la Fuerza Resultante: ',
-                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 5),
-                  Text(
-                      'Componente X: ${_formatearCientifico(fuerzaResultanteX)} N'),
-                  Text(
-                      'Componente Y: ${_formatearCientifico(fuerzaResultanteY)} N'),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Magnitud: ${_formatearCientifico(magnitudResultante)} N',
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Text(
-                    'Ángulo: ${anguloResultante.toStringAsFixed(2)}°',
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  ...resultadosCalculos
+                      .map((resultado) => _buildCalculoDetallado(resultado)),
 
-                  SizedBox(
-                    height: 20,
-                  ),
+                  const SizedBox(height: 24),
 
-                  // Plano con Vector y Fuerza Resultante...
-
+                  // Fuerza resultante
                   Card(
-                    child: CustomPaint(
-                      painter: PlanoFuerzaResultantePainter(
-                        anguloResultante: anguloResultante,
-                        magnitudResultante: magnitudResultante,
-                        origenX: fuerzaResultanteX,
-                        origenY: fuerzaResultanteY,
+                    elevation: 6,
+                    color: Colors.blue.shade50,
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'FUERZA RESULTANTE',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.blue,
+                            ),
+                          ),
+                          const Divider(),
+                          Text(
+                            'Componentes de la Fuerza Resultante: ',
+                            style: TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.bold),
+                          ),
+                          const SizedBox(height: 5),
+                          Text(
+                              'Componente X: ${_formatearCientifico(fuerzaResultanteX)} N'),
+                          Text(
+                              'Componente Y: ${_formatearCientifico(fuerzaResultanteY)} N'),
+                          const SizedBox(height: 8),
+                          Text(
+                            'Magnitud: ${_formatearCientifico(magnitudResultante)} N',
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            'Ángulo: ${anguloResultante.toStringAsFixed(2)}°',
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+
+                          SizedBox(
+                            height: 20,
+                          ),
+
+                          // Plano con Vector y Fuerza Resultante...
+
+                          Card(
+                            child: CustomPaint(
+                              painter: PlanoFuerzaResultantePainter(
+                                anguloResultante: anguloResultante,
+                                magnitudResultante: magnitudResultante,
+                                origenX: fuerzaResultanteX,
+                                origenY: fuerzaResultanteY,
+                              ),
+                              size: Size(300, 300),
+                            ),
+                          )
+                        ],
                       ),
-                      size: Size(300, 300),
                     ),
-                  )
+                  ),
                 ],
               ),
             ),

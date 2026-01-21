@@ -2,13 +2,16 @@
 
 import 'dart:math';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_3d_controller/flutter_3d_controller.dart';
 import 'package:graficos_dinamicos/AR/AR.dart';
 import 'package:graficos_dinamicos/AR/UtilidadesAr.dart';
 import 'package:graficos_dinamicos/Anuncios/AdBannerWrapper.dart';
 import 'package:graficos_dinamicos/Anuncios/CargarAnuncios.dart';
+import 'package:graficos_dinamicos/Firebase/service/creditos_usuario.dart';
 import 'package:graficos_dinamicos/others/Informacion.dart';
+import 'package:graficos_dinamicos/widgets/blur-content.dart';
 import 'NotacionCientifica.dart';
 
 class CalFuerzasRectangulo extends StatefulWidget {
@@ -28,26 +31,28 @@ class CalFuerzasRectangulo extends StatefulWidget {
   final double carga1convertida;
   final double carga2convertida;
   final double carga3convertida;
+  final int creditosUsuario;
 
-  const CalFuerzasRectangulo({
-    Key? key,
-    required this.cargaTrabajo,
-    required this.carga1,
-    required this.carga2,
-    required this.carga3,
-    required this.angulo,
-    required this.distancia12,
-    required this.distancia23,
-    required this.distancia13,
-    required this.combinacion3d,
-    required this.modelocarga1,
-    required this.modelocarga2,
-    required this.modelocarga3,
-    required this.resultante3d,
-    required this.carga1convertida,
-    required this.carga2convertida,
-    required this.carga3convertida,
-  }) : super(key: key);
+  const CalFuerzasRectangulo(
+      {Key? key,
+      required this.cargaTrabajo,
+      required this.carga1,
+      required this.carga2,
+      required this.carga3,
+      required this.angulo,
+      required this.distancia12,
+      required this.distancia23,
+      required this.distancia13,
+      required this.combinacion3d,
+      required this.modelocarga1,
+      required this.modelocarga2,
+      required this.modelocarga3,
+      required this.resultante3d,
+      required this.carga1convertida,
+      required this.carga2convertida,
+      required this.carga3convertida,
+      required this.creditosUsuario})
+      : super(key: key);
 
   @override
   _CalFuerzasRectanguloState createState() => _CalFuerzasRectanguloState();
@@ -106,6 +111,7 @@ class _CalFuerzasRectanguloState extends State<CalFuerzasRectangulo> {
 
   late Map<String, Map<String, dynamic>> mapaseleccionado;
 
+  final uid = FirebaseAuth.instance.currentUser!.uid;
 
   @override
   void initState() {
@@ -383,8 +389,10 @@ class _CalFuerzasRectanguloState extends State<CalFuerzasRectangulo> {
             IconButton(
               icon: const Icon(Icons.help_outline),
               onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const Informacion()));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const Informacion()));
               },
             ),
           ],
@@ -563,7 +571,7 @@ class _CalFuerzasRectanguloState extends State<CalFuerzasRectangulo> {
                                 onPressed: () {
                                   setState(() {
                                     estaPlay = !estaPlay;
-      
+
                                     if (estaPlay) {
                                       _controller.playAnimation();
                                     } else {
@@ -614,168 +622,193 @@ class _CalFuerzasRectanguloState extends State<CalFuerzasRectangulo> {
                     style: TextStyle(color: Colors.white),
                   ),
                 ),
-                Card(
-                  elevation: 5,
-                  margin: const EdgeInsets.symmetric(vertical: 10),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: SizedBox(
-                      width: 400,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          const Text(
-                            "Magnitud de las Fuerzas",
-                            style: TextStyle(
-                                fontSize: 19, fontWeight: FontWeight.bold),
-                          ),
-                          const SizedBox(height: 10),
-                          Text(
-                            mensajeResultadoC1,
-                            style: const TextStyle(fontSize: 16),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                Card(
-                  elevation: 5,
-                  margin: const EdgeInsets.symmetric(vertical: 10),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: SizedBox(
-                      width: 400,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          const Text(
-                            "Fuerzas con Dirección y Componentes",
-                            style: TextStyle(
-                                fontSize: 19, fontWeight: FontWeight.bold),
-                          ),
-                          const SizedBox(height: 10),
-                          Text(
-                            mensajeComponentesC1,
-                            style: const TextStyle(fontSize: 16),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                Card(
-                  elevation: 5,
-                  margin: const EdgeInsets.symmetric(vertical: 10),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: SizedBox(
-                      width: 400,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          const Text(
-                            "Sumas de las Fuerzas",
-                            style: TextStyle(
-                                fontSize: 19, fontWeight: FontWeight.bold),
-                          ),
-                          const SizedBox(height: 10),
-                          Text(
-                            mensajesumasC1,
-                            style: const TextStyle(fontSize: 16),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                Card(
-                  elevation: 5,
-                  margin: const EdgeInsets.symmetric(vertical: 10),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: SizedBox(
-                      width: 400,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              const Text(
-                                "Magnitud de la F. Resultante",
-                                style: TextStyle(
-                                    fontSize: 19, fontWeight: FontWeight.bold),
-                              ),
-                              BotonAR(mostrarResultante: true),
-                            ],
-                          ),
-                          const SizedBox(height: 10),
-                          Text(
-                            mensajeFresultanteC1,
-                            style: const TextStyle(
-                                fontSize: 22, fontWeight: FontWeight.bold),
-                          ),
-                          if (mostrarResultante)
-                            SizedBox(
-                              height: 280,
-                              child: Flutter3DViewer(
-                                controller: _controllerResult,
-                                src: widget.resultante3d,
-                                progressBarColor: Colors.blue,
-                                activeGestureInterceptor: true,
-                                enableTouch: true,
-                                onProgress: (double progressValue) {
-                                  debugPrint(
-                                      'Carga del Modelo en Proceso : $progressValue');
-                                },
-                                onLoad: (String modelAddress) {
-                                  debugPrint('Modelo Cargando : $modelAddress');
-                                },
-                                onError: (String error) {
-                                  debugPrint('Modelo Fallo al Cargar : $error');
-                                },
-                              ),
-                            ),
-                          if (mostrarResultante)
-                            Container(
-                              margin: const EdgeInsets.all(5),
-                              decoration: const BoxDecoration(
-                                  color: Colors.blue,
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(5))),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
+                IntrinsicHeight(
+                  child: BlurContent(
+                    userCredits: widget.creditosUsuario,
+                    cost: 5,
+                    onUnlock: () async {
+                      descontarCreditosUsuario(uid, 5);
+                    },
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Card(
+                          elevation: 5,
+                          margin: const EdgeInsets.symmetric(vertical: 10),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: SizedBox(
+                              width: 400,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  ElevatedButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          resultPlay = !resultPlay;
-      
-                                          if (resultPlay) {
-                                            _controllerResult.playAnimation();
-                                          } else {
-                                            _controllerResult.pauseAnimation();
-                                          }
-                                        });
-                                      },
-                                      child: Icon(resultPlay
-                                          ? Icons.pause_outlined
-                                          : Icons.play_arrow_rounded)),
-                                  const SizedBox(
-                                    width: 20,
+                                  const Text(
+                                    "Magnitud de las Fuerzas",
+                                    style: TextStyle(
+                                        fontSize: 19,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  const SizedBox(height: 10),
+                                  Text(
+                                    mensajeResultadoC1,
+                                    style: const TextStyle(fontSize: 16),
                                   ),
                                 ],
                               ),
-                            )
-                        ],
-                      ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        Card(
+                          elevation: 5,
+                          margin: const EdgeInsets.symmetric(vertical: 10),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: SizedBox(
+                              width: 400,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  const Text(
+                                    "Fuerzas con Dirección y Componentes",
+                                    style: TextStyle(
+                                        fontSize: 19,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  const SizedBox(height: 10),
+                                  Text(
+                                    mensajeComponentesC1,
+                                    style: const TextStyle(fontSize: 16),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        Card(
+                          elevation: 5,
+                          margin: const EdgeInsets.symmetric(vertical: 10),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: SizedBox(
+                              width: 400,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  const Text(
+                                    "Sumas de las Fuerzas",
+                                    style: TextStyle(
+                                        fontSize: 19,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  const SizedBox(height: 10),
+                                  Text(
+                                    mensajesumasC1,
+                                    style: const TextStyle(fontSize: 16),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        Card(
+                          elevation: 5,
+                          margin: const EdgeInsets.symmetric(vertical: 10),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: SizedBox(
+                              width: 400,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: [
+                                      const Text(
+                                        "Magnitud de la F. Resultante",
+                                        style: TextStyle(
+                                            fontSize: 19,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      BotonAR(mostrarResultante: true),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 10),
+                                  Text(
+                                    mensajeFresultanteC1,
+                                    style: const TextStyle(
+                                        fontSize: 22,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  if (mostrarResultante)
+                                    SizedBox(
+                                      height: 280,
+                                      child: Flutter3DViewer(
+                                        controller: _controllerResult,
+                                        src: widget.resultante3d,
+                                        progressBarColor: Colors.blue,
+                                        activeGestureInterceptor: true,
+                                        enableTouch: true,
+                                        onProgress: (double progressValue) {
+                                          debugPrint(
+                                              'Carga del Modelo en Proceso : $progressValue');
+                                        },
+                                        onLoad: (String modelAddress) {
+                                          debugPrint(
+                                              'Modelo Cargando : $modelAddress');
+                                        },
+                                        onError: (String error) {
+                                          debugPrint(
+                                              'Modelo Fallo al Cargar : $error');
+                                        },
+                                      ),
+                                    ),
+                                  if (mostrarResultante)
+                                    Container(
+                                      margin: const EdgeInsets.all(5),
+                                      decoration: const BoxDecoration(
+                                          color: Colors.blue,
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(5))),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          ElevatedButton(
+                                              onPressed: () {
+                                                setState(() {
+                                                  resultPlay = !resultPlay;
+
+                                                  if (resultPlay) {
+                                                    _controllerResult
+                                                        .playAnimation();
+                                                  } else {
+                                                    _controllerResult
+                                                        .pauseAnimation();
+                                                  }
+                                                });
+                                              },
+                                              child: Icon(resultPlay
+                                                  ? Icons.pause_outlined
+                                                  : Icons.play_arrow_rounded)),
+                                          const SizedBox(
+                                            width: 20,
+                                          ),
+                                        ],
+                                      ),
+                                    )
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ),
+                )
               ],
             ),
           ),
@@ -826,7 +859,8 @@ class _CalFuerzasRectanguloState extends State<CalFuerzasRectangulo> {
                                 const Text(
                                   "Carga N1",
                                   style: TextStyle(
-                                      fontSize: 20, fontWeight: FontWeight.bold),
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold),
                                 ),
                                 SizedBox(
                                   height: 160,
@@ -854,7 +888,8 @@ class _CalFuerzasRectanguloState extends State<CalFuerzasRectangulo> {
                                 Text(
                                   ' ${widget.carga1.toStringAsFixed(2)}',
                                   style: const TextStyle(
-                                      fontSize: 16, fontWeight: FontWeight.bold),
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold),
                                 )
                               ],
                             ),
@@ -866,7 +901,8 @@ class _CalFuerzasRectanguloState extends State<CalFuerzasRectangulo> {
                                 const Text(
                                   "Carga N2",
                                   style: TextStyle(
-                                      fontSize: 20, fontWeight: FontWeight.bold),
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold),
                                 ),
                                 SizedBox(
                                   height: 160,
@@ -894,7 +930,8 @@ class _CalFuerzasRectanguloState extends State<CalFuerzasRectangulo> {
                                 Text(
                                   ' ${widget.carga2.toStringAsFixed(2)}',
                                   style: const TextStyle(
-                                      fontSize: 16, fontWeight: FontWeight.bold),
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold),
                                 )
                               ],
                             ),
@@ -906,7 +943,8 @@ class _CalFuerzasRectanguloState extends State<CalFuerzasRectangulo> {
                                 const Text(
                                   "Carga N3",
                                   style: TextStyle(
-                                      fontSize: 20, fontWeight: FontWeight.bold),
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold),
                                 ),
                                 SizedBox(
                                   height: 160,
@@ -934,7 +972,8 @@ class _CalFuerzasRectanguloState extends State<CalFuerzasRectangulo> {
                                 Text(
                                   ' ${widget.carga3.toStringAsFixed(2)}',
                                   style: const TextStyle(
-                                      fontSize: 16, fontWeight: FontWeight.bold),
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold),
                                 )
                               ],
                             ),
@@ -946,7 +985,8 @@ class _CalFuerzasRectanguloState extends State<CalFuerzasRectangulo> {
                         child: Column(
                           children: [
                             Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
                                 children: [
                                   const Text(
                                     "Sentido de las Fuerzas",
@@ -989,7 +1029,7 @@ class _CalFuerzasRectanguloState extends State<CalFuerzasRectangulo> {
                                       onPressed: () {
                                         setState(() {
                                           estaPlay = !estaPlay;
-      
+
                                           if (estaPlay) {
                                             _controller.playAnimation();
                                           } else {
@@ -1018,7 +1058,8 @@ class _CalFuerzasRectanguloState extends State<CalFuerzasRectangulo> {
                             child: Column(children: [
                               const Text("Digite el sentido de las Fuerzas",
                                   style: TextStyle(
-                                      fontSize: 20, fontWeight: FontWeight.bold)),
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold)),
                               const SizedBox(height: 20),
                               const Text(
                                 "Sentido de la Fuerza (2 y 1)",
@@ -1141,144 +1182,170 @@ class _CalFuerzasRectanguloState extends State<CalFuerzasRectangulo> {
                       const SizedBox(
                         height: 20,
                       ),
-                      Card(
-                        elevation: 5,
-                        margin: const EdgeInsets.symmetric(vertical: 10),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: SizedBox(
-                            width: 400,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                const Text(
-                                  "Magnitud de las Fuerzas",
-                                  style: TextStyle(
-                                      fontSize: 19, fontWeight: FontWeight.bold),
-                                ),
-                                const SizedBox(height: 10),
-                                Text(
-                                  mensajeResultadoC2,
-                                  style: const TextStyle(fontSize: 16),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      Card(
-                          elevation: 5,
-                          margin: const EdgeInsets.symmetric(vertical: 10),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8),
-                            child: SizedBox(
-                              width: 400,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  const Text(
-                                    "Sumas",
-                                    style: TextStyle(
-                                        fontSize: 19,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  const SizedBox(height: 10),
-                                  Text(
-                                    mensajesumasC2,
-                                    style: const TextStyle(fontSize: 16),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          )),
-                      const SizedBox(height: 20),
-                      Card(
-                        elevation: 5,
-                        margin: const EdgeInsets.symmetric(vertical: 10),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8),
-                          child: SizedBox(
-                            width: 400,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    const Text(
-                                      "Magnitud de la F. Resultante",
-                                      style: TextStyle(
-                                          fontSize: 19,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    BotonAR(mostrarResultante: true),
-                                  ],
-                                ),
-                                const SizedBox(height: 10),
-                                Text(
-                                  mensajeFresultanteC2,
-                                  style: const TextStyle(
-                                      fontSize: 22, fontWeight: FontWeight.bold),
-                                ),
-                                if (mostrarResultante)
-                                  SizedBox(
-                                    height: 280,
-                                    child: Flutter3DViewer(
-                                      controller: _controllerResult,
-                                      src: widget.resultante3d,
-                                      progressBarColor: Colors.blue,
-                                      activeGestureInterceptor: true,
-                                      enableTouch: true,
-                                      onProgress: (double progressValue) {
-                                        debugPrint(
-                                            'Carga del Modelo en Proceso : $progressValue');
-                                      },
-                                      onLoad: (String modelAddress) {
-                                        debugPrint(
-                                            'Modelo Cargando : $modelAddress');
-                                      },
-                                      onError: (String error) {
-                                        debugPrint(
-                                            'Modelo Fallo al Cargar : $error');
-                                      },
-                                    ),
-                                  ),
-                                if (mostrarResultante)
-                                  Container(
-                                    margin: const EdgeInsets.all(5),
-                                    decoration: const BoxDecoration(
-                                        color: Colors.blue,
-                                        borderRadius:
-                                            BorderRadius.all(Radius.circular(5))),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
+                      IntrinsicHeight(
+                        child: BlurContent(
+                          userCredits: widget.creditosUsuario,
+                          cost: 5,
+                          onUnlock: () async {
+                            descontarCreditosUsuario(uid, 5);
+                          },
+                          child: Column(
+                            children: [
+                              Card(
+                                elevation: 5,
+                                margin:
+                                    const EdgeInsets.symmetric(vertical: 10),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: SizedBox(
+                                    width: 400,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
                                       children: [
-                                        ElevatedButton(
-                                            onPressed: () {
-                                              setState(() {
-                                                resultPlay = !resultPlay;
-      
-                                                if (resultPlay) {
-                                                  _controllerResult
-                                                      .playAnimation();
-                                                } else {
-                                                  _controllerResult
-                                                      .pauseAnimation();
-                                                }
-                                              });
-                                            },
-                                            child: Icon(resultPlay
-                                                ? Icons.pause_outlined
-                                                : Icons.play_arrow_rounded)),
-                                        const SizedBox(
-                                          width: 20,
+                                        const Text(
+                                          "Magnitud de las Fuerzas",
+                                          style: TextStyle(
+                                              fontSize: 19,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        const SizedBox(height: 10),
+                                        Text(
+                                          mensajeResultadoC2,
+                                          style: const TextStyle(fontSize: 16),
                                         ),
                                       ],
                                     ),
-                                  )
-                              ],
-                            ),
+                                  ),
+                                ),
+                              ),
+                              Card(
+                                  elevation: 5,
+                                  margin:
+                                      const EdgeInsets.symmetric(vertical: 10),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8),
+                                    child: SizedBox(
+                                      width: 400,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          const Text(
+                                            "Sumas",
+                                            style: TextStyle(
+                                                fontSize: 19,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          const SizedBox(height: 10),
+                                          Text(
+                                            mensajesumasC2,
+                                            style:
+                                                const TextStyle(fontSize: 16),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  )),
+                              const SizedBox(height: 20),
+                              Card(
+                                elevation: 5,
+                                margin:
+                                    const EdgeInsets.symmetric(vertical: 10),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8),
+                                  child: SizedBox(
+                                    width: 400,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceAround,
+                                          children: [
+                                            const Text(
+                                              "Magnitud de la F. Resultante",
+                                              style: TextStyle(
+                                                  fontSize: 19,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            BotonAR(mostrarResultante: true),
+                                          ],
+                                        ),
+                                        const SizedBox(height: 10),
+                                        Text(
+                                          mensajeFresultanteC2,
+                                          style: const TextStyle(
+                                              fontSize: 22,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        if (mostrarResultante)
+                                          SizedBox(
+                                            height: 280,
+                                            child: Flutter3DViewer(
+                                              controller: _controllerResult,
+                                              src: widget.resultante3d,
+                                              progressBarColor: Colors.blue,
+                                              activeGestureInterceptor: true,
+                                              enableTouch: true,
+                                              onProgress:
+                                                  (double progressValue) {
+                                                debugPrint(
+                                                    'Carga del Modelo en Proceso : $progressValue');
+                                              },
+                                              onLoad: (String modelAddress) {
+                                                debugPrint(
+                                                    'Modelo Cargando : $modelAddress');
+                                              },
+                                              onError: (String error) {
+                                                debugPrint(
+                                                    'Modelo Fallo al Cargar : $error');
+                                              },
+                                            ),
+                                          ),
+                                        if (mostrarResultante)
+                                          Container(
+                                            margin: const EdgeInsets.all(5),
+                                            decoration: const BoxDecoration(
+                                                color: Colors.blue,
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(5))),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                ElevatedButton(
+                                                    onPressed: () {
+                                                      setState(() {
+                                                        resultPlay =
+                                                            !resultPlay;
+
+                                                        if (resultPlay) {
+                                                          _controllerResult
+                                                              .playAnimation();
+                                                        } else {
+                                                          _controllerResult
+                                                              .pauseAnimation();
+                                                        }
+                                                      });
+                                                    },
+                                                    child: Icon(resultPlay
+                                                        ? Icons.pause_outlined
+                                                        : Icons
+                                                            .play_arrow_rounded)),
+                                                const SizedBox(
+                                                  width: 20,
+                                                ),
+                                              ],
+                                            ),
+                                          )
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              )
+                            ],
                           ),
                         ),
                       )
@@ -1302,8 +1369,10 @@ class _CalFuerzasRectanguloState extends State<CalFuerzasRectangulo> {
             IconButton(
               icon: const Icon(Icons.help_outline),
               onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const Informacion()));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const Informacion()));
               },
             ),
           ],
@@ -1482,7 +1551,7 @@ class _CalFuerzasRectanguloState extends State<CalFuerzasRectangulo> {
                                 onPressed: () {
                                   setState(() {
                                     estaPlay = !estaPlay;
-      
+
                                     if (estaPlay) {
                                       _controller.playAnimation();
                                     } else {
@@ -1533,168 +1602,193 @@ class _CalFuerzasRectanguloState extends State<CalFuerzasRectangulo> {
                     style: TextStyle(color: Colors.white),
                   ),
                 ),
-                Card(
-                  elevation: 5,
-                  margin: const EdgeInsets.symmetric(vertical: 10),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: SizedBox(
-                      width: 400,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          const Text(
-                            "Magnitud de las Fuerzas",
-                            style: TextStyle(
-                                fontSize: 19, fontWeight: FontWeight.bold),
-                          ),
-                          const SizedBox(height: 10),
-                          Text(
-                            mensajeResultadoC3,
-                            style: const TextStyle(fontSize: 16),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                Card(
-                  elevation: 5,
-                  margin: const EdgeInsets.symmetric(vertical: 10),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: SizedBox(
-                      width: 400,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          const Text(
-                            "Fuerzas con Dirección y Componentes",
-                            style: TextStyle(
-                                fontSize: 19, fontWeight: FontWeight.bold),
-                          ),
-                          const SizedBox(height: 10),
-                          Text(
-                            mensajeComponentesC3,
-                            style: const TextStyle(fontSize: 16),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                Card(
-                  elevation: 5,
-                  margin: const EdgeInsets.symmetric(vertical: 10),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: SizedBox(
-                      width: 400,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          const Text(
-                            "Sumas de las Fuerzas",
-                            style: TextStyle(
-                                fontSize: 19, fontWeight: FontWeight.bold),
-                          ),
-                          const SizedBox(height: 10),
-                          Text(
-                            mensajesumasC3,
-                            style: const TextStyle(fontSize: 16),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                Card(
-                  elevation: 5,
-                  margin: const EdgeInsets.symmetric(vertical: 10),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: SizedBox(
-                      width: 400,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              const Text(
-                                "Magnitud de la F. Resultante",
-                                style: TextStyle(
-                                    fontSize: 19, fontWeight: FontWeight.bold),
-                              ),
-                              BotonAR(mostrarResultante: true),
-                            ],
-                          ),
-                          const SizedBox(height: 10),
-                          Text(
-                            mensajeFresultanteC3,
-                            style: const TextStyle(
-                                fontSize: 22, fontWeight: FontWeight.bold),
-                          ),
-                          if (mostrarResultante)
-                            SizedBox(
-                              height: 280,
-                              child: Flutter3DViewer(
-                                controller: _controllerResult,
-                                src: widget.resultante3d,
-                                progressBarColor: Colors.blue,
-                                activeGestureInterceptor: true,
-                                enableTouch: true,
-                                onProgress: (double progressValue) {
-                                  debugPrint(
-                                      'Carga del Modelo en Proceso : $progressValue');
-                                },
-                                onLoad: (String modelAddress) {
-                                  debugPrint('Modelo Cargando : $modelAddress');
-                                },
-                                onError: (String error) {
-                                  debugPrint('Modelo Fallo al Cargar : $error');
-                                },
-                              ),
-                            ),
-                          if (mostrarResultante)
-                            Container(
-                              margin: const EdgeInsets.all(5),
-                              decoration: const BoxDecoration(
-                                  color: Colors.blue,
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(5))),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
+                IntrinsicHeight(
+                  child: BlurContent(
+                    userCredits: widget.creditosUsuario,
+                    cost: 5,
+                    onUnlock: () async {
+                      descontarCreditosUsuario(uid, 5);
+                    },
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Card(
+                          elevation: 5,
+                          margin: const EdgeInsets.symmetric(vertical: 10),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: SizedBox(
+                              width: 400,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  ElevatedButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          resultPlay = !resultPlay;
-      
-                                          if (resultPlay) {
-                                            _controllerResult.playAnimation();
-                                          } else {
-                                            _controllerResult.pauseAnimation();
-                                          }
-                                        });
-                                      },
-                                      child: Icon(resultPlay
-                                          ? Icons.pause_outlined
-                                          : Icons.play_arrow_rounded)),
-                                  const SizedBox(
-                                    width: 20,
+                                  const Text(
+                                    "Magnitud de las Fuerzas",
+                                    style: TextStyle(
+                                        fontSize: 19,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  const SizedBox(height: 10),
+                                  Text(
+                                    mensajeResultadoC3,
+                                    style: const TextStyle(fontSize: 16),
                                   ),
                                 ],
                               ),
-                            )
-                        ],
-                      ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        Card(
+                          elevation: 5,
+                          margin: const EdgeInsets.symmetric(vertical: 10),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: SizedBox(
+                              width: 400,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  const Text(
+                                    "Fuerzas con Dirección y Componentes",
+                                    style: TextStyle(
+                                        fontSize: 19,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  const SizedBox(height: 10),
+                                  Text(
+                                    mensajeComponentesC3,
+                                    style: const TextStyle(fontSize: 16),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        Card(
+                          elevation: 5,
+                          margin: const EdgeInsets.symmetric(vertical: 10),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: SizedBox(
+                              width: 400,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  const Text(
+                                    "Sumas de las Fuerzas",
+                                    style: TextStyle(
+                                        fontSize: 19,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  const SizedBox(height: 10),
+                                  Text(
+                                    mensajesumasC3,
+                                    style: const TextStyle(fontSize: 16),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        Card(
+                          elevation: 5,
+                          margin: const EdgeInsets.symmetric(vertical: 10),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: SizedBox(
+                              width: 400,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: [
+                                      const Text(
+                                        "Magnitud de la F. Resultante",
+                                        style: TextStyle(
+                                            fontSize: 19,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      BotonAR(mostrarResultante: true),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 10),
+                                  Text(
+                                    mensajeFresultanteC3,
+                                    style: const TextStyle(
+                                        fontSize: 22,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  if (mostrarResultante)
+                                    SizedBox(
+                                      height: 280,
+                                      child: Flutter3DViewer(
+                                        controller: _controllerResult,
+                                        src: widget.resultante3d,
+                                        progressBarColor: Colors.blue,
+                                        activeGestureInterceptor: true,
+                                        enableTouch: true,
+                                        onProgress: (double progressValue) {
+                                          debugPrint(
+                                              'Carga del Modelo en Proceso : $progressValue');
+                                        },
+                                        onLoad: (String modelAddress) {
+                                          debugPrint(
+                                              'Modelo Cargando : $modelAddress');
+                                        },
+                                        onError: (String error) {
+                                          debugPrint(
+                                              'Modelo Fallo al Cargar : $error');
+                                        },
+                                      ),
+                                    ),
+                                  if (mostrarResultante)
+                                    Container(
+                                      margin: const EdgeInsets.all(5),
+                                      decoration: const BoxDecoration(
+                                          color: Colors.blue,
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(5))),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          ElevatedButton(
+                                              onPressed: () {
+                                                setState(() {
+                                                  resultPlay = !resultPlay;
+
+                                                  if (resultPlay) {
+                                                    _controllerResult
+                                                        .playAnimation();
+                                                  } else {
+                                                    _controllerResult
+                                                        .pauseAnimation();
+                                                  }
+                                                });
+                                              },
+                                              child: Icon(resultPlay
+                                                  ? Icons.pause_outlined
+                                                  : Icons.play_arrow_rounded)),
+                                          const SizedBox(
+                                            width: 20,
+                                          ),
+                                        ],
+                                      ),
+                                    )
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ),
+                )
               ],
             ),
           ),
